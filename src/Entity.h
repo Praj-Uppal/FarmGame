@@ -1,7 +1,5 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-#include <tuple>
-using std::tuple;
 
 class Entity {
     protected:
@@ -12,8 +10,12 @@ class Entity {
         int careRequired;
 
     public:
-        Entity();
-        virtual void advanceDay();
+        Entity(int growthRequired, int careRequired);
+
         bool isMature() const;
+        int getGrowthStage();
+
+        // Advance day functionality may vary by child class
+        virtual void advanceDay() = 0;
 };
 #endif
