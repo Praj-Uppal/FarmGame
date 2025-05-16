@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLOT_H
+#define PLOT_H
 
 #include <tuple>
 
@@ -47,3 +48,5 @@ private:
     IVec2 topLeftCoord;
     IVec2 dimensions;
 };
+
+#endif
