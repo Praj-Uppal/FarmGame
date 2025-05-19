@@ -101,3 +101,19 @@ void Inventory::printInventory() {
   }
   return;
 }
+
+//Define functions to provide the begining and end of inventory map
+map<string,pair<Item*, int>>::iterator Inventory::begin() {return inventoryMap.begin();}
+map<string,pair<Item*, int>>::iterator Inventory::end() {return inventoryMap.end();}
+map<string,pair<Item*, int>>::const_iterator Inventory::begin() const {return (inventoryMap.begin());}
+map<string,pair<Item*, int>>::const_iterator Inventory::end() const {return (inventoryMap.end());}
+
+//Define inventory map setter
+void Inventory::setInventorymap(map<string, pair<Item *, int>> newmap) {
+  inventoryMap = newmap;
+}
+
+//Define inventory map getter
+map<string, pair<Item *, int>> Inventory::getInventorymap() const {
+  return inventoryMap;
+}

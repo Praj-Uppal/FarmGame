@@ -30,6 +30,16 @@ class Inventory {
 
   // Method to print the inventory; mainly for testing.
   void printInventory();
+
+  //Define functions to provide begining and end of map so we can iterate 
+  map<string,pair<Item*, int>>::iterator begin();
+  map<string,pair<Item*,int>>::iterator end();
+  map<string,pair<Item*, int>>::const_iterator Inventory::begin() const;
+  map<string,pair<Item*, int>>::const_iterator Inventory::end() const;
+
+  //Declare get and set method for inventory map
+  map<string, pair<Item *, int>> getInventorymap() const;
+  void setInventorymap(map<string, pair<Item *, int>> newmap);
 };
 
 #endif
