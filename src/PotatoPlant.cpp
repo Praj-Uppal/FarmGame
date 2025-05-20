@@ -11,6 +11,8 @@ vector<Item> PotatoPlant::harvest() {
     if (isMature()) {
         produce.push_back(Item(4, 2, "Potato"));
         produce.push_back(Item(4, 2, "Potato"));
+        produce.push_back(Item(4, 2, "Potato"));
+        produce.push_back(Item(4, 2, "Potato"));
         return produce;
     }
     // return empty vector if not harvestable
