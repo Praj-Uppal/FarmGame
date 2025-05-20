@@ -12,8 +12,16 @@ class Entity {
     public:
         Entity(int growthRequired, int careRequired);
 
+        // Get information regarding the entity
         bool isMature() const;
         int getGrowthStage();
+        int getMaxGrowth();
+        int getCaredForDays();
+        int getCareRequired();
+        // Set information
+        void setCaredForDays(int days);
+        void setGrowthStage(int stage);
+
 
         // Advance day functionality may vary by child class
         virtual void advanceDay() = 0;

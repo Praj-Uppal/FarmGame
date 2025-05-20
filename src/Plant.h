@@ -4,20 +4,30 @@
 #include "Entity.h"
 #include "Item.h"
 #include <tuple>
+#include <vector>
         
 using std::tuple;
 
 class Plant : protected Entity {
     protected:
         tuple<int, int> position;
+        bool watered;
 
     public:
         Plant(tuple<int, int> position, int growthRequired, int careRequired);
+
+        // Positional data
         void setPosition(tuple<int, int> pos);
         tuple<int, int> getPosistion() const;
 
-        virtual void grow() = 0;
-        virtual Item harvest() = 0;
+        // water plant and check if it is watered
+        void waterPlant();
+        void dryPlant();
+        bool isWatered();
+
+        // Functions to be filled by child classes
+        virtual void advanceDay() = 0;
+        virtual vector<Item> harvest() = 0;
 };
 
 #endif
