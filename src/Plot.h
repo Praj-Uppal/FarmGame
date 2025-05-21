@@ -41,6 +41,7 @@ public:
     {
         return dimensions;
     }
+    void setCurrentCapacity(int cap);
 
 private:
     int currentCapacity;

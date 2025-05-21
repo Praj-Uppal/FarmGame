@@ -5,12 +5,18 @@
 #include "Plot.h"
 #include <vector>
 
+using std::vector;
+
 class FarmPlot : protected Plot {
     protected:
-        std::vector<Plant*> plants;
+        vector<Plant*> plants;
     public:
+        FarmPlot();
+
         bool addPlant(Plant* plant);
-        bool removePlant(tuple<int, int> position);
+        bool removePlant(int index);
+        vector<Plant*> getPlants();
+
 };
 
 #endif
