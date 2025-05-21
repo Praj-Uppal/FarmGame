@@ -10,6 +10,7 @@ PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 7, 3) {
 vector<tuple<Item,int>> PotatoPlant::harvest() {
     vector<tuple<Item,int>> produce;
     if (isMature()) {
+        //Push back the "harvested" items, and thier quantity into a vector
         produce.push_back({Potatoitem,4});
         return produce;
     }

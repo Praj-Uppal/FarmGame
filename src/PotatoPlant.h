@@ -5,7 +5,7 @@
 #include "Plant.h"
 #include <vector>
 
-class PotatoPlant : protected Plant {
+class PotatoPlant : public Plant {
 
     public:
         PotatoPlant(tuple<int, int> position);

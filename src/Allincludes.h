@@ -10,8 +10,15 @@
 #include "Entity.h"
 #include "Inventory.h"
 #include "Item.h"
-#include "Player.h"
 #include "Plot.h"
+#include "Plant.h"
+#include "PotatoPlant.h"
+#include "CarrotPlant.h"
+#include "FarmPlot.h"
+#include "Player.h"
+#include "Shop.h"
+#include "Display.h"
+
 
 // Defining a type for coordinate
 typedef tuple<int, int> coord;
