@@ -6,7 +6,6 @@
 #include "Item.h"
 
 using namespace std;
-
 class Inventory {
  protected:
   // Defining the map which will contain items. The key would be a string with
@@ -34,8 +33,8 @@ class Inventory {
   //Define functions to provide begining and end of map so we can iterate 
   map<string,pair<Item*, int>>::iterator begin();
   map<string,pair<Item*,int>>::iterator end();
-  map<string,pair<Item*, int>>::const_iterator Inventory::begin() const;
-  map<string,pair<Item*, int>>::const_iterator Inventory::end() const;
+  map<string,pair<Item*, int>>::const_iterator begin() const;
+  map<string,pair<Item*, int>>::const_iterator end() const;
 
   //Declare get and set method for inventory map
   map<string, pair<Item *, int>> getInventorymap() const;
