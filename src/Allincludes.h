@@ -17,19 +17,20 @@
 typedef tuple<int, int> coord;
 
 // Defining Item attributes. Item(Sell Price, Buy price, Name)
-Item Carrot1 = Item(2,1,"Carrot");
-Item* Carrot = &Carrot1;
+//Also creating a pointer pointing to that specific item.
+Item Carrotitem = Item(2,1,"Carrot");
+Item* Carrot = &Carrotitem;
 
-Item Potato1 = Item(4,2,"Potato");
-Item* Potato = &Potato1;
+Item Potatoitem = Item(4,2,"Potato");
+Item* Potato = &Potatoitem;
 
 // Animals will need to have 2 items, one that is produced when
 // harvested, and one which is used to create entity. For entity item make
 // sure buy price and sell price are same to prevent infinite money glitches
-Item cowCattle1 = Item(5, 5, "Cattle");
-Item* cattle = &cowCattle1;
+Item cowCattleitem = Item(5, 5, "Cattle");
+Item* cattle = &cowCattleitem;
 // Cant purchase steak from shop so no point to Buyprice
-Item Steak1 = Item(10, 10, "Steak");
-Item* Steak = &Steak1;
+Item Steakitem = Item(10, 10, "Steak");
+Item* Steak = &Steakitem;
 
 #endif

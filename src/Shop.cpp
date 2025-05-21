@@ -25,7 +25,7 @@ bool Shop::buyCarrot(int qty, Player* player) { buyItem(Carrot, qty, player); }
 bool Shop::buyPotato(int qty, Player* player) { buyItem(Potato, qty, player); }
 
 // function to buy cow cattle
-bool Shop::buyCow(int qty, Player* player) { buyItem(cowCattle, qty, player); }
+bool Shop::buyCow(int qty, Player* player) { buyItem(cattle, qty, player); }
 
 // Define general function to sell an item
 bool Shop::sellItem(Item* item, int qty, Player* player) {
