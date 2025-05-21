@@ -1,18 +1,16 @@
 #include "PotatoPlant.h"
 #include "Plant.h"
+#include"Allincludes.h"
 #include <vector>
 
 PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 7, 3) {
     
 }
 
-vector<Item> PotatoPlant::harvest() {
-    vector<Item> produce;
+vector<tuple<Item,int>> PotatoPlant::harvest() {
+    vector<tuple<Item,int>> produce;
     if (isMature()) {
-        produce.push_back(Item(4, 2, "Potato"));
-        produce.push_back(Item(4, 2, "Potato"));
-        produce.push_back(Item(4, 2, "Potato"));
-        produce.push_back(Item(4, 2, "Potato"));
+        produce.push_back({Potatoitem,4});
         return produce;
     }
     // return empty vector if not harvestable
