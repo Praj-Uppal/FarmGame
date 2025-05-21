@@ -3,7 +3,7 @@
 
 class Display {
     public:
-        void drawGameWindow();
+        static void drawGameWindow();
 };
 
 #endif

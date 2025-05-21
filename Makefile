@@ -1,5 +1,9 @@
 # Makefile
 
+# To compile ncurses use the following config flags
+# CC=clang CXX=clang++ ./configure --prefix /home/spagett/docs/UNI/oop/FARM-GAME-1/ncurses --enable-widec --with-pthread CFLAGS="-fPIC" CXXFLAGS="-fPIC"
+# replace prefix path with your prefix
+
 # Compiler
 CXX = clang++
 
@@ -7,7 +11,7 @@ CXX = clang++
 CXXFLAGS = -std=c++11 -Wall -Wextra
 
 # Exec name
-TARGET = ncurses_test
+TARGET = main 
 
 # Sources
 SRCS = main.cpp
@@ -24,7 +28,12 @@ all:
 	echo "This is not working yet"
 	# $(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) $(SRCS) $(LIBS)
 	# ./$(TARGET)
-
+	
+.PHONY: display
+display:
+	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp $(LIBS)
+	./$(TARGET)
+	
 # Just build
 .PHONY: build 
 build: 
