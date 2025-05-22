@@ -7,7 +7,7 @@
 
 using std::vector;
 
-class FarmPlot : protected Plot {
+class FarmPlot : public Plot {
     protected:
         vector<Plant*> plants;
     public:
@@ -17,6 +17,7 @@ class FarmPlot : protected Plot {
         bool removePlant(int index);
         vector<Plant*> getPlants();
 
+        ~FarmPlot();
 };
 
 #endif
