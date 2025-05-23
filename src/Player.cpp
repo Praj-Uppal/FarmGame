@@ -11,7 +11,7 @@ Player::Player()
       money(0) {};
 
 // Define get methods
-coord Player::getposition() const { return position; }
+coord Player::getPosition() const { return position; }
 int Player::getDirection() const { return direction; }
 Inventory* Player::getPlayersInventory() const { return playersInventory; }
 int Player::getMoney() const { return money; }
