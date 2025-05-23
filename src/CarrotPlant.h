@@ -10,7 +10,7 @@ class CarrotPlant : public Plant {
     public:
         CarrotPlant(tuple<int, int> position);
         void advanceDay();
-        vector<tuple<Item,int>> harvest();
+        vector<tuple<Item*,int>> harvest();
 };
 
 #endif
