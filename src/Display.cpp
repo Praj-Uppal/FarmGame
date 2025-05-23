@@ -8,13 +8,11 @@ WINDOW *create_newwin(int height, int width, int starty, int startx)
 	box(local_win, 0 , 0);		/* 0, 0 gives default characters 
 					 * for the vertical and horizontal
 					 * lines			*/
-    // wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	wrefresh(local_win);		/* Show that box 		*/
 
 	return local_win;
 }
 
-void Display::drawGameWindow() {
+WINDOW *Display::drawMainWindow() {
     WINDOW *borderWin;
     // Init ncurses
     initscr(); // This starts curses mode
@@ -28,6 +26,7 @@ void Display::drawGameWindow() {
     int height = LINES;
     int width = COLS;
     borderWin = create_newwin(height, width, starty, startx);
+    wrefresh(borderWin);
     if (COLS < 111 || LINES < 43) {
         WINDOW *errorWin;
         int height = 8;
@@ -45,9 +44,69 @@ void Display::drawGameWindow() {
 
         wrefresh(errorWin);
     }
+    return borderWin;
 }
+WINDOW *Display::drawInventoryWindow(WINDOW *mainWin) {
+    WINDOW *inventoryWin;
+    int starty = (LINES * 0.85);
+    int height = (LINES * 0.15);
+
+    int startx = 1;
+    int width = (COLS - 2) * 0.75;
+    inventoryWin = create_newwin(height, width, starty, startx);
+    mvwprintw(inventoryWin, 0, 1, "Inventory");
+    wrefresh(inventoryWin);
+    return inventoryWin;
+}
+
+WINDOW *Display::drawDynamicWindow(WINDOW *mainWin) {
+    WINDOW *dynamicWindow;
+
+    int starty = 1;
+    int height = (LINES - 2);
+
+    int startx = (COLS * 0.75);
+    int width = (COLS * 0.25) - 1;
+
+    dynamicWindow = create_newwin(height, width, starty, startx);
+    wrefresh(dynamicWindow);
+    return dynamicWindow;
+}
+
+WINDOW *Display::drawCommandWindow(WINDOW *mainWin) {
+    WINDOW *commandWindow;
+
+    int starty = 1;
+    int height = (LINES * 0.15);
+
+    int startx = 1;
+    int width = (COLS - 2) * 0.75;
+    commandWindow = create_newwin(height, width, starty, startx);
+    mvwprintw(commandWindow, 0, 1, "Commands");
+    wrefresh(commandWindow);
+    return commandWindow;
+}
+WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
+    WINDOW *gameWindow;
+
+    int starty = (LINES * 0.15) + 1;
+    int height = LINES - (LINES * 0.30) - 1;
+
+    int startx = 1;
+    int width = (COLS - 2) * 0.75;
+
+    gameWindow = create_newwin(height, width, starty, startx);
+    mvwprintw(gameWindow, 0, 1, "Game");
+    wrefresh(gameWindow);
+    return gameWindow;
+}
+// This is just for testing display functionality
 int main() {
-    Display::drawGameWindow();
+    WINDOW *win = Display::drawMainWindow();
+    Display::drawInventoryWindow(win);
+    Display::drawDynamicWindow(win);
+    Display::drawCommandWindow(win);
+    Display::drawGameWindow(win);
     getchar();
     endwin();
     return 0;
