@@ -1,6 +1,7 @@
 #include "Allincludes.h"
 #include "CarrotPlant.h"
 #include "Plant.h"
+#include "GameItems.cpp"
 #include <vector>
 
 CarrotPlant::CarrotPlant(tuple<int, int> position) : Plant(position, 5, 2) {

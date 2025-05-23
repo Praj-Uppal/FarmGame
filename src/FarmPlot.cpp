@@ -7,7 +7,7 @@
 
 FarmPlot::FarmPlot(int maxCap, coord topLeft, coord dimension): Plot(maxCap,topLeft,dimension) {};
 
-FarmPlot::FarmPlot(): Plot(50,{0,0},{20,20}){};
+FarmPlot::FarmPlot(): Plot(50,coord(0,0),coord(20,20)){};
 
 bool FarmPlot::addPlant(Plant* plant) {
     if (getMaxCapacity() > getCurrentCapacity()) {
