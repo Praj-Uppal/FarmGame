@@ -1,5 +1,8 @@
 #include "Display.h"
+#include "Allincludes.h"
+#include "Inventory.h"
 #include <ncurses.h>
+#include <strings.h>
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
 {	
@@ -97,12 +100,28 @@ WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
     wrefresh(gameWindow);
     return gameWindow;
 }
+void Display::drawInventory(WINDOW *invWin, Player *player) {
+    // Inventory *playersInv = player->getPlayersInventory();
+  // for (auto index = playersInv.begin(); index != playersInv.end();
+       // index++) {
+    // Prints the values stored at the memory address index is pointing to.
+    // Since the second entry in itself is a pair, the data needs to be printed
+    // by accessing first element (second.first) and then second element
+    // (second.second)
+      // mvwprintw(invWin, 1, 1, "Hello");
+  // }
+
+}
 int main() {
     WINDOW *win = Display::drawMainWindow();
-    Display::drawInventoryWindow(win);
+    WINDOW *invWin = Display::drawInventoryWindow(win);
     Display::drawDynamicWindow(win);
     Display::drawCommandWindow(win);
     Display::drawGameWindow(win);
+    Player testPlayer = Player();
+    Inventory *inv = testPlayer.getPlayersInventory();
+    inv->addItem(Carrotitem);
+    // Display::drawInventory(invWin, testPlayer);
     getchar();
     endwin();
     return 0;

@@ -11,7 +11,7 @@ class Display {
         static WINDOW *drawDynamicWindow(WINDOW *mainWin);
         static WINDOW *drawCommandWindow(WINDOW *mainWin);
         static WINDOW *drawGameWindow(WINDOW *mainWin);
-        // static WINDOW *drawInventory(WINDOW *invWin, *Player player);
+        static void drawInventory(WINDOW *invWin, Player *player);
 
 };
 
