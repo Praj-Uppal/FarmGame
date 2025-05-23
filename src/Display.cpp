@@ -2,13 +2,10 @@
 #include <ncurses.h>
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
-{	WINDOW *local_win;
-
+{	
+    WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		/* 0, 0 gives default characters 
-					 * for the vertical and horizontal
-					 * lines			*/
-
+	box(local_win, 0 , 0);
 	return local_win;
 }
 
@@ -100,7 +97,6 @@ WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
     wrefresh(gameWindow);
     return gameWindow;
 }
-// This is just for testing display functionality
 int main() {
     WINDOW *win = Display::drawMainWindow();
     Display::drawInventoryWindow(win);

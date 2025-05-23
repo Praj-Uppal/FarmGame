@@ -5,12 +5,12 @@
 #include "Plant.h"
 #include <vector>
 
-class PotatoPlant : protected Plant {
+class PotatoPlant : public Plant {
 
     public:
         PotatoPlant(tuple<int, int> position);
         void advanceDay();
-        vector<Item> harvest();
+        vector<tuple<Item,int>> harvest();
 };
 
 #endif

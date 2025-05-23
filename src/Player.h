@@ -1,4 +1,9 @@
-#include "Allincludes.h"
+#include"Plant.h"
+#include"Item.h"
+#include"FarmPlot.h"
+#include "Inventory.h"
+#include"PotatoPlant.h"
+#include"CarrotPlant.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <iostream>
@@ -33,11 +38,11 @@ class Player {
 
   // Function to move player
   void move(coord newPositon);
-  /*
+  
     //Function for player to water plant (Plants yet to implement)
-    void water(*Plant plant1);
+  void water(Plant* plant1);
 
-    //Function for player to feed animals
+  /*  //Function for player to feed animals
     void feed(*Animal animal1)
   */
 
@@ -45,7 +50,7 @@ class Player {
   Item gather(Entity* E1);
 
   //Function for planting a new plant into the farmplot
-  // void plant(Item* item, Farmplot* farmplot);
+   void plant(Item* item, FarmPlot* farmplot);
 
 
 };

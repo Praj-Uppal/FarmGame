@@ -14,7 +14,7 @@ int Inventory::howMany(string itemName) {
   }
   // If item not found in inventory, at function throws an out_of_range
   // exception error, which is caught.
-  catch (const out_of_range *e) {
+  catch (const out_of_range& e) {
     // Since item was not in inventory, return 0 for the quantity.
     return 0;
   }

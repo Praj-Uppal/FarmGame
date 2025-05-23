@@ -8,7 +8,7 @@
         
 using std::tuple;
 
-class Plant : protected Entity {
+class Plant : public Entity {
     protected:
         tuple<int, int> position;
         bool watered;
@@ -27,7 +27,7 @@ class Plant : protected Entity {
 
         // Functions to be filled by child classes
         virtual void advanceDay() = 0;
-        virtual vector<Item> harvest() = 0;
+        virtual vector<tuple<Item,int>> harvest() = 0;
 };
 
 #endif
