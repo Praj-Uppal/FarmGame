@@ -46,9 +46,11 @@ void Display::drawGameWindow() {
         wrefresh(errorWin);
     }
 }
+/*
 int main() {
     Display::drawGameWindow();
     getchar();
     endwin();
     return 0;
 }
+*/

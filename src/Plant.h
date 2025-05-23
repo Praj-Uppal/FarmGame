@@ -8,7 +8,7 @@
         
 using std::tuple;
 
-class Plant : protected Entity {
+class Plant : public Entity {
     protected:
         tuple<int, int> position;
         bool watered;

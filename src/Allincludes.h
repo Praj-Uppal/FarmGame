@@ -6,38 +6,29 @@
 #include <map>
 #include <tuple>
 #include <vector>
+#include<ncurses.h>
 
-#include "Entity.h"
-#include "Inventory.h"
-#include "Item.h"
-#include "Plot.h"
-#include "Plant.h"
-#include "PotatoPlant.h"
-#include "CarrotPlant.h"
-#include "FarmPlot.h"
-#include "Player.h"
-#include "Shop.h"
-#include "Display.h"
-
-
+using namespace std;
 // Defining a type for coordinate
 typedef tuple<int, int> coord;
 
-// Defining Item attributes. Item(Sell Price, Buy price, Name)
-//Also creating a pointer pointing to that specific item.
-Item Carrotitem = Item(2,1,"Carrot");
-Item* Carrot = &Carrotitem;
 
-Item Potatoitem = Item(4,2,"Potato");
-Item* Potato = &Potatoitem;
+// Declare Item attributes. Item(Sell Price, Buy price, Name)
+//Also Declaring a pointer pointing to that specific item.
+#include"Item.h"
+extern Item Carrotitem;
+extern Item* Carrot;
+
+extern Item Potatoitem;
+extern Item* Potato;
 
 // Animals will need to have 2 items, one that is produced when
 // harvested, and one which is used to create entity. For entity item make
 // sure buy price and sell price are same to prevent infinite money glitches
-Item cowCattleitem = Item(5, 5, "Cattle");
-Item* cattle = &cowCattleitem;
+extern Item cowCattleitem;
+extern Item* cattle;
 // Cant purchase steak from shop so no point to Buyprice
-Item Steakitem = Item(10, 10, "Steak");
-Item* Steak = &Steakitem;
+extern Item Steakitem;
+extern Item* Steak;
 
 #endif

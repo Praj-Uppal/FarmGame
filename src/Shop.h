@@ -1,5 +1,7 @@
 #include "Allincludes.h"
-
+#include"Item.h"
+#include"Inventory.h"
+#include"Player.h"
 #ifndef SHOP_H
 #define SHOP_H
 

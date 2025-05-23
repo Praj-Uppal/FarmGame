@@ -1,7 +1,6 @@
 #ifndef PLOT_H
 #define PLOT_H
-
-#include <tuple>
+#include"Allincludes.h"
 
 
 /**
@@ -14,13 +13,14 @@
 class Plot
 {
     /**
-     * 2D vector consisting of integers. The first
+     * Defining a pair consisting of integers.
      */
-    typedef std::tuple<int, int> IVec2;
 
 public:
     Plot() = delete;
     virtual ~Plot() = default;
+
+    Plot(int maxCap, coord topLeft, coord dimension);
 
     inline int getCurrentCapacity() const
     {
@@ -32,12 +32,12 @@ public:
         return maxCapacity;
     }
 
-    inline IVec2 getTopLeftCoord() const
+    inline coord getTopLeftCoord() const
     {
         return topLeftCoord;
     }
 
-    inline IVec2 getDimensions() const
+    inline coord getDimensions() const
     {
         return dimensions;
     }
@@ -46,8 +46,8 @@ public:
 private:
     int currentCapacity;
     int maxCapacity;
-    IVec2 topLeftCoord;
-    IVec2 dimensions;
+    coord topLeftCoord;
+    coord dimensions;
 };
 
 #endif

@@ -5,6 +5,10 @@
 
 // }
 
+FarmPlot::FarmPlot(int maxCap, coord topLeft, coord dimension): Plot(maxCap,topLeft,dimension) {};
+
+FarmPlot::FarmPlot(): Plot(50,{0,0},{20,20}){};
+
 bool FarmPlot::addPlant(Plant* plant) {
     if (getMaxCapacity() > getCurrentCapacity()) {
         setCurrentCapacity((getCurrentCapacity() + 1));

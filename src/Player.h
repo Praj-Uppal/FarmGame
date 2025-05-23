@@ -1,4 +1,9 @@
-#include "Allincludes.h"
+#include"Plant.h"
+#include"Item.h"
+#include"FarmPlot.h"
+#include "Inventory.h"
+#include"PotatoPlant.h"
+#include"CarrotPlant.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <iostream>
