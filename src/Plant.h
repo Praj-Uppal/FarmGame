@@ -27,7 +27,7 @@ class Plant : public Entity {
 
         // Functions to be filled by child classes
         virtual void advanceDay() = 0;
-        virtual vector<tuple<Item,int>> harvest() = 0;
+        virtual vector<tuple<Item*,int>> harvest() = 0;
 };
 
 #endif

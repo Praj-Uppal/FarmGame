@@ -1,14 +1,15 @@
 #include "Allincludes.h"
 #include "CarrotPlant.h"
 #include "Plant.h"
+#include "GameItems.cpp"
 #include <vector>
 
 CarrotPlant::CarrotPlant(tuple<int, int> position) : Plant(position, 5, 2) {
     
 }
 
-vector<tuple<Item,int>> CarrotPlant::harvest() {
-    vector<tuple<Item,int>> produce;
+vector<tuple<Item*,int>> CarrotPlant::harvest() {
+    vector<tuple<Item*,int>> produce;
     if (isMature()) {
         produce.push_back({Carrotitem,2});
         return produce;
