@@ -1,8 +1,11 @@
 #include "Display.h"
 #include "Allincludes.h"
 #include "Inventory.h"
+#include <locale.h>
 #include <ncurses.h>
-#include <strings.h>
+#include <sstream>
+#include <string>
+using std::string;
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
 {	
@@ -19,6 +22,8 @@ WINDOW *Display::drawMainWindow() {
     cbreak(); // Catch all keyboard input
     keypad(stdscr, TRUE); // Allows use of arrow keys
     noecho(); // Do not echo user input to terminal
+    setlocale(LC_ALL, ""); // This enables unicode support
+    curs_set(0); // This hides the cursor
 
     int starty = 0;
     int startx = 0;
@@ -100,28 +105,95 @@ WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
     wrefresh(gameWindow);
     return gameWindow;
 }
-void Display::drawInventory(WINDOW *invWin, Player *player) {
-    // Inventory *playersInv = player->getPlayersInventory();
-  // for (auto index = playersInv.begin(); index != playersInv.end();
-       // index++) {
-    // Prints the values stored at the memory address index is pointing to.
-    // Since the second entry in itself is a pair, the data needs to be printed
-    // by accessing first element (second.first) and then second element
-    // (second.second)
-      // mvwprintw(invWin, 1, 1, "Hello");
-  // }
+void Display::drawInventory(WINDOW *invWin, Player player) {
+    Inventory *playersInv = player.getPlayersInventory();
+    int horiCount = 1;
+    int vertCount = 1;
+
+    for (auto index = playersInv->begin(); index != playersInv->end();
+        index++) {
+
+        string invEntry;
+        std::stringstream formatter;
+        formatter << index->first << ": " << index->second.second << " ";
+        invEntry = formatter.str();
+
+        int invWidth = (COLS - 2) * 0.75;
+        // If too big for one line, new line in inventory
+        if ((invWidth / (10 * (horiCount + 1))) < 1) {
+            horiCount = 0;
+            vertCount++;
+        }
+    
+        wmove(invWin, vertCount, 2 + (10 * (horiCount - 1)));
+        wprintw(invWin, "%s", invEntry.c_str());
+
+        wrefresh(invWin);
+        horiCount++;
+    }
+}
+void Display::drawPlayer(WINDOW *gameWin, Player player) {
+    int playerY = std::get<0>(player.getPosition());
+    int playerX = std::get<1>(player.getPosition());
+
+    wmove(gameWin, playerY, playerX);
+    waddwstr(gameWin, L"☺"); // display player head
+
+
+    WINDOW *compassWin;
+
+    mvwprintw(gameWin, 1, ((COLS - 2) * 0.75) - 10, "Direction");
+
+    int starty = (LINES * 0.15) + 3;
+    int height = 3;
+
+    int startx = ((COLS - 2) * 0.75) - 6;
+    int width = 3;
+
+    compassWin = create_newwin(height, width, starty, startx);
+    wmove(compassWin, 1, 1);
+    if (player.getDirection() == 0) {
+        waddwstr(compassWin, L"↑"); 
+    } else if (player.getDirection() == 1) {
+        waddwstr(compassWin, L"→"); 
+    } else if (player.getDirection() == 2) {
+        waddwstr(compassWin, L"↓"); 
+    } else if (player.getDirection() == 3) {
+        waddwstr(compassWin, L"←"); 
+    }
+    wrefresh(gameWin);
+    wrefresh(compassWin);
 
 }
+void Display::drawPlots(WINDOW *gameWin, vector<Plot> plots) {
+    for (int i = 0; i < plots.size(); i++) {
+        int starty = std::get<0>(plots[i].getTopLeftCoord());
+        int startx = std::get<1>(plots[i].getTopLeftCoord());
+        // TODO: Fix plots to make dimensions work properly!!!!
+        // int width = plots[i].getDimensions()
+        // WINDOW *plotWin = create_newwin(int height, int width, int starty, int startx)
+    }
+}
+
 int main() {
     WINDOW *win = Display::drawMainWindow();
     WINDOW *invWin = Display::drawInventoryWindow(win);
     Display::drawDynamicWindow(win);
     Display::drawCommandWindow(win);
-    Display::drawGameWindow(win);
+    WINDOW *gameWin = Display::drawGameWindow(win);
+
     Player testPlayer = Player();
     Inventory *inv = testPlayer.getPlayersInventory();
-    inv->addItem(Carrotitem);
-    // Display::drawInventory(invWin, testPlayer);
+
+    Item* Carroty = new Item(2,1,"Carrot");
+    Item* Potates = new Item(4,2,"Potato");
+    inv->addItem(Carroty);
+    inv->addItem(Potates);
+    inv->addItem(Potates);
+    Display::drawInventory(invWin, testPlayer);
+    testPlayer.move(coord{4, 5});
+    // testPlayer.setDirection(0);
+    Display::drawPlayer(gameWin, testPlayer);
     getchar();
     endwin();
     return 0;

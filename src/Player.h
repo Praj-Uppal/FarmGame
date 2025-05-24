@@ -25,7 +25,7 @@ class Player {
   Player();
 
   //Declare Get methods for variables
-  coord getposition() const;
+  coord getPosition() const;
   int getDirection() const;
   Inventory* getPlayersInventory() const;
   int getMoney() const;

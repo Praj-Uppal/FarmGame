@@ -1,5 +1,5 @@
-#include"Allincludes.h"
-#include"Item.h"
+#include "Allincludes.h"
+#include "Item.h"
 
 // Defining Item attributes. Item(Sell Price, Buy price, Name)
 //Also creating a pointer pointing to that specific item.
