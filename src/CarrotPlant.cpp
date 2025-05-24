@@ -11,7 +11,8 @@ CarrotPlant::CarrotPlant(tuple<int, int> position) : Plant(position, 5, 2) {
 vector<tuple<Item*,int>> CarrotPlant::harvest() {
     vector<tuple<Item*,int>> produce;
     if (isMature()) {
-        produce.push_back({Carrotitem,2});
+        Item* Carrot = new Item(2,1,"Carrot");
+        produce.push_back({Carrot,2});
         return produce;
     }
     // return empty vector if not harvestable

@@ -11,7 +11,8 @@ vector<tuple<Item*,int>> PotatoPlant::harvest() {
     vector<tuple<Item*,int>> produce;
     if (isMature()) {
         //Push back the "harvested" items, and thier quantity into a vector
-        produce.push_back({Potatoitem,4});
+        Item* Potato = new Item(4,2,"Potato");
+        produce.push_back({Potato,4});
         return produce;
     }
     // return empty vector if not harvestable
