@@ -15,7 +15,7 @@ class Display {
         static WINDOW *drawGameWindow(WINDOW *mainWin);
         static void drawInventory(WINDOW *invWin, Player player);
         static void drawPlayer(WINDOW *gameWin, Player player);
-        static void drawPlots(WINDOW *gameWin, vector<Plot> plots);
+        static void drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots);
 
 };
 

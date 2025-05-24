@@ -5,7 +5,7 @@ Plot::Plot(coord topLeft, coord dimension)
     : currentCapacity(0),
       topLeftCoord(topLeft),
       //Max capacity is calculated by subtracting 2 from each dimension and multiplying
-      maxCapacity((dimension.first-2) * (dimension.second-2)),
+      maxCapacity((get<0>(dimension) - 2) * (get<1>(dimension) - 2)),
       dimensions(dimension) {};
 
 //Set methods for capacity

@@ -37,9 +37,9 @@ bool FarmPlot::removePlant(int index) {
 vector<Plant*> FarmPlot::getPlants() { return plants; }
 
 // Destructor to deallocate memory for dynamically allocated plants
-FarmPlot::~FarmPlot() {
-  for (int i = 0; i < plants.size(); i++) {
-    delete plants.at(i);
-  }
-  plants.clear();
-}
+// FarmPlot::~FarmPlot() {
+  // for (int i = 0; i < plants.size(); i++) {
+    // delete plants.at(i);
+  // }
+  // plants.clear();
+// }

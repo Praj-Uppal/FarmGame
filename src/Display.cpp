@@ -1,15 +1,18 @@
 #include "Display.h"
 #include "Allincludes.h"
+#include "CarrotPlant.h"
+#include "FarmPlot.h"
 #include "Inventory.h"
+#include "Plant.h"
 #include <iterator>
 #include <locale.h>
 #include <ncurses.h>
 #include <sstream>
 #include <string>
+#include <vector>
 using std::string;
 
-WINDOW *create_newwin(int height, int width, int starty, int startx)
-{	
+WINDOW *create_newwin(int height, int width, int starty, int startx) {	
     WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx);
 	box(local_win, 0 , 0);
@@ -25,6 +28,8 @@ WINDOW *Display::drawMainWindow() {
     noecho(); // Do not echo user input to terminal
     setlocale(LC_ALL, ""); // This enables unicode support
     curs_set(0); // This hides the cursor
+    start_color();
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
 
     int starty = 0;
     int startx = 0;
@@ -175,13 +180,35 @@ void Display::drawPlayer(WINDOW *gameWin, Player player) {
     wrefresh(compassWin);
 
 }
-void Display::drawPlots(WINDOW *gameWin, vector<Plot> plots) {
+void Display::drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots) {
     for (int i = 0; i < plots.size(); i++) {
-        int starty = std::get<0>(plots[i].getTopLeftCoord());
-        int startx = std::get<1>(plots[i].getTopLeftCoord());
-        // TODO: Fix plots to make dimensions work properly!!!!
-        // int width = plots[i].getDimensions()
-        // WINDOW *plotWin = create_newwin(int height, int width, int starty, int startx)
+        int starty = (std::get<0>(plots[i].getTopLeftCoord()) + (LINES * 0.15) + 2);
+        int startx = (std::get<1>(plots[i].getTopLeftCoord()) + 2);
+        int height = std::get<0>(plots[i].getDimensions());
+        int width = std::get<1>(plots[i].getDimensions());
+        vector<Plant*> plants = plots[i].getPlants();
+        WINDOW *plotWin = create_newwin(height, width, starty, startx);
+        for (int j = 0; j < plants.size(); j++) {
+            if (plants[j]->isWatered()) {
+
+                wattron(plotWin, COLOR_PAIR(1));
+            }
+            wmove(plotWin, (std::get<0>(plants[j]->getPosistion()) + 1), (std::get<1>(plants[j]->getPosistion())) + 1);
+            switch (plants[j]->getGrowthStage()) {
+                case 0:
+                    waddwstr(plotWin, L"▢");
+                    break;
+                case 1:
+                    waddwstr(plotWin, L"▨");
+                    break;
+                case 2:
+                    waddwstr(plotWin, L"▩");
+                    break;
+            }
+            wattroff(plotWin, COLOR_PAIR(1));
+        }
+
+        wrefresh(plotWin);
     }
 }
 
@@ -204,10 +231,16 @@ int main() {
     testPlayer.move(coord{4, 5});
     // testPlayer.setDirection(0);
     Display::drawPlayer(gameWin, testPlayer);
-    getchar();
-    testPlayer.move(coord{8, 5});
-    testPlayer.setDirection(0);
-    Display::drawPlayer(gameWin, testPlayer);
+    CarrotPlant *carrot = new CarrotPlant(coord{0,0});
+    CarrotPlant *carrot2 = new CarrotPlant(coord{0,1});
+    FarmPlot farm = FarmPlot(coord{0,0}, coord{5,4});
+    farm.addPlant(carrot);
+    carrot->waterPlant();
+    carrot->setGrowthStage(2);
+    carrot2->dryPlant();
+    farm.addPlant(carrot2);
+    vector<FarmPlot> test = {farm};
+    Display::drawFarmPlots(gameWin, test);
     getchar();
     endwin();
     return 0;

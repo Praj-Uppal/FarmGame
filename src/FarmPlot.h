@@ -24,7 +24,7 @@ class FarmPlot : public Plot {
   vector<Plant*> getPlants();
 
   //Declare destructor
-  ~FarmPlot();
+  // ~FarmPlot();
 };
 
 #endif

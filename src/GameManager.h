@@ -55,7 +55,8 @@ class GameManager {
 #define GAMEMANAGER_H
 
 #include "Allincludes.h"
-#include"C:\Users\Halfa\Farmgame\FARM-GAME-1\pdcurses\PDCurses-master\curses.h"
+// #include"C:\Users\Halfa\Farmgame\FARM-GAME-1\pdcurses\PDCurses-master\curses.h"
+#include <ncurses.h>
 #include"AllHeader.h"
 
 class GameManager {
