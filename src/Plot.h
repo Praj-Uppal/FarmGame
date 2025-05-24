@@ -22,7 +22,7 @@ class Plot {
  public:
   // Declare Constructor and Destructor
   Plot() = delete;
-  virtual ~Plot() = default;
+  virtual ~Plot() = 0;
   Plot(coord topLeft, coord dimension);
 
   //Declare get methods

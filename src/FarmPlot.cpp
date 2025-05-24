@@ -14,7 +14,7 @@ bool FarmPlot::addPlant(Plant* plant) {
   if (getMaxCapacity() > getCurrentCapacity()) {
     //If not full add plant to vector and increment capacity
     setCurrentCapacity((getCurrentCapacity() + 1));
-    plants.push_back(plant);
+    plants.push_back(plant); //Plant pointer now in vector
     return true;
   } else {
     //If full return false
@@ -41,5 +41,6 @@ FarmPlot::~FarmPlot() {
   for (int i = 0; i < plants.size(); i++) {
     delete plants.at(i);
   }
+  //Clear vector
   plants.clear();
 }

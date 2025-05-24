@@ -14,9 +14,11 @@ class Inventory {
   map<string, pair<Item *, int>> inventoryMap;
 
  public:
-  // Maps are automatically initialised and no other variables so defualt
+  // Maps are automatically initialised and no other variables so default
   // constructor is only construcutor
   Inventory();
+  //Declare destructor
+  ~Inventory();
 
   // Methods to add or remove items from the inventory
   void addItem(Item *item, int Quantity);
@@ -30,7 +32,7 @@ class Inventory {
   // Method to print the inventory; mainly for testing.
   void printInventory();
 
-  //Define functions to provide begining and end of map so we can iterate 
+  //Declare functions to provide begining and end of map so we can iterate 
   map<string,pair<Item*, int>>::iterator begin();
   map<string,pair<Item*,int>>::iterator end();
   map<string,pair<Item*, int>>::const_iterator begin() const;
