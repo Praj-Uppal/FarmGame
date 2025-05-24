@@ -1,9 +1,19 @@
 #include "Plot.h"
 
-void Plot::setCurrentCapacity(int cap) { currentCapacity = cap; }
-
-Plot::Plot(int maxCap, coord topLeft, coord dimension)
+//Defining Constructor for Plot Class
+Plot::Plot(coord topLeft, coord dimension)
     : currentCapacity(0),
-      maxCapacity(maxCap),
       topLeftCoord(topLeft),
+      //Max capacity is calculated by subtracting 2 from each dimension and multiplying
+      maxCapacity((dimension.first-2) * (dimension.second-2)),
       dimensions(dimension) {};
+
+//Set methods for capacity
+void Plot::setCurrentCapacity(int cap) { currentCapacity = cap;}
+void Plot::setMaxCapacity(int cap) { maxCapacity = cap;}
+
+//Get Methods for plot attributes
+int Plot::getCurrentCapacity() const { return currentCapacity; }
+int Plot::getMaxCapacity() const { return maxCapacity; }
+coord Plot::getTopLeftCoord() const { return topLeftCoord; }
+coord Plot::getDimensions() const { return dimensions; }

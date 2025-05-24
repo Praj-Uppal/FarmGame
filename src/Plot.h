@@ -1,53 +1,39 @@
 #ifndef PLOT_H
 #define PLOT_H
-#include"Allincludes.h"
-
+#include "Allincludes.h"
 
 /**
- * The plot is a general-purpose container for game world entities. It provides spatial management, which
- * entails (x,y) coordinates of its top left corner, and dimensions of length and height. It also defines
- * common functions to add or remove entities. Additionally, it includes common attributes such as count,
- * and capacity which will be relevant to all plots. It acts as a container which ensures organised
- * placement and updating of entities over time.
+ * The plot is a general-purpose container for game world entities. It provides
+ * spatial management, which entails (x,y) coordinates of its top left corner,
+ * and dimensions of length and height. It also defines common functions to add
+ * or remove entities. Additionally, it includes common attributes such as
+ * count, and capacity which will be relevant to all plots. It acts as a
+ * container which ensures organised placement and updating of entities over
+ * time.
  */
-class Plot
-{
-    /**
-     * Defining a pair consisting of integers.
-     */
+class Plot {
+ private:
+  // Define Attributes
+  int currentCapacity;
+  int maxCapacity;
+  coord topLeftCoord;
+  coord dimensions;
 
-public:
-    Plot() = delete;
-    virtual ~Plot() = default;
+ public:
+  // Declare Constructor and Destructor
+  Plot() = delete;
+  virtual ~Plot() = default;
+  Plot(coord topLeft, coord dimension);
 
-    Plot(int maxCap, coord topLeft, coord dimension);
+  //Declare get methods
+  int getCurrentCapacity() const;
+  int getMaxCapacity() const;
+  coord getTopLeftCoord() const;
+  coord getDimensions() const;
 
-    inline int getCurrentCapacity() const
-    {
-        return currentCapacity;
-    }
-
-    inline int getMaxCapacity() const
-    {
-        return maxCapacity;
-    }
-
-    inline coord getTopLeftCoord() const
-    {
-        return topLeftCoord;
-    }
-
-    inline coord getDimensions() const
-    {
-        return dimensions;
-    }
-    void setCurrentCapacity(int cap);
-
-private:
-    int currentCapacity;
-    int maxCapacity;
-    coord topLeftCoord;
-    coord dimensions;
+  //Declare set methods
+  void setCurrentCapacity(int cap);
+  void setMaxCapacity(int cap);
 };
 
 #endif
