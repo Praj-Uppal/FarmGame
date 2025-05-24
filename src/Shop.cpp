@@ -20,18 +20,27 @@ bool Shop::buyItem(Item* item, int qty, Player* player) {
 
 // Function to buy carrots
 bool Shop::buyCarrot(int qty, Player* player) {
-  Item* Carrot = new Item(2,1,"Carrot");
-  return buyItem(Carrot, qty, player); }
+  Item* Carrot = new Item(2, 1, "Carrot");
+  bool result = buyItem(Carrot, qty, player);
+  delete Carrot;
+  return result;
+}
 
 // Function to buy potatos
 bool Shop::buyPotato(int qty, Player* player) {
-  Item* Potato = new Item(4,2,"Potato");
-  return buyItem(Potato, qty, player); }
+  Item* Potato = new Item(4, 2, "Potato");
+  bool result = buyItem(Potato, qty, player);
+  delete Potato;
+  return result;
+}
 
 // function to buy cow cattle
 bool Shop::buyCow(int qty, Player* player) {
-  Item* cattle = new Item(5,5,"Cattle");
-  return buyItem(cattle, qty, player); }
+  Item* cattle = new Item(5, 5, "Cattle");
+  bool result = buyItem(cattle, qty, player);
+  delete cattle;
+  return result;
+}
 
 // Define general function to sell an item
 bool Shop::sellItem(Item* item, int qty, Player* player) {

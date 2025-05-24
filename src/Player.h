@@ -24,6 +24,8 @@ class Player {
  public:
   // Player constructor
   Player();
+  //Player destructor
+  // ~Player();
 
   //Declare Get methods for variables
   coord getPosition() const;

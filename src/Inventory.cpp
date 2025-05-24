@@ -4,6 +4,16 @@ using namespace std;
 // Default constructor. To reiterate from header file, maps are automaticlly
 // initialised and there are no other variables to initalise.
 Inventory::Inventory() {};
+// Destructor.
+Inventory::~Inventory() {
+  // Need to delete all items in inventory since dynamically allocated
+  for (auto index = inventoryMap.begin(); index != inventoryMap.end();
+       index++) {
+    delete index->second.first;
+  }
+  // Clear Inventory map
+  inventoryMap.clear();
+};
 
 int Inventory::howMany(string itemName) {
   // Tries to locate item in the inventory map and return its quantity.
@@ -14,7 +24,7 @@ int Inventory::howMany(string itemName) {
   }
   // If item not found in inventory, at function throws an out_of_range
   // exception error, which is caught.
-  catch (const out_of_range& e) {
+  catch (const out_of_range &e) {
     // Since item was not in inventory, return 0 for the quantity.
     return 0;
   }
@@ -26,6 +36,7 @@ void Inventory::addItem(Item *itemtoadd, int quanity) {
   // by the quantity to be added.
   if (howMany(itemName) > 0) {
     inventoryMap.at(itemName).second += quanity;
+    delete itemtoadd;  // Deletes item from memory. Since item is in map.
     return;
   } else {  // This is the case where the item is not found in the inventory
     // If the item is not pre-existing, inserts a new key and value into the map
@@ -63,6 +74,8 @@ void Inventory::removeItem(string itemName, int quantity) {
     inventoryMap.at(itemName).second -= quantity;
     if (howMany(itemName) < 0) {  // If quantity becomes negative, sets it to 0
       inventoryMap.at(itemName).second = 0;
+      delete inventoryMap.at(itemName).first;  // Deletes item from memory.
+      inventoryMap.erase(itemName);  // Removes item from inventory map
       return;
     }
   } else {  // In the case where item does not exist, there is nothing to
@@ -79,6 +92,8 @@ void Inventory::removeItem(string itemName) {
     inventoryMap.at(itemName).second -= 1;
     if (howMany(itemName) < 0) {  // If quantity becomes negative, sets it to 0
       inventoryMap.at(itemName).second = 0;
+      delete inventoryMap.at(itemName).first;  // Deletes item from memory.
+      inventoryMap.erase(itemName);  // Removes item from inventory map
       return;
     }
   } else {  // In the case where item does not exist, there is nothing to
@@ -102,18 +117,26 @@ void Inventory::printInventory() {
   return;
 }
 
-//Define functions to provide the begining and end of inventory map
-map<string,pair<Item*, int>>::iterator Inventory::begin() {return inventoryMap.begin();}
-map<string,pair<Item*, int>>::iterator Inventory::end() {return inventoryMap.end();}
-map<string,pair<Item*, int>>::const_iterator Inventory::begin() const {return (inventoryMap.begin());}
-map<string,pair<Item*, int>>::const_iterator Inventory::end() const {return (inventoryMap.end());}
+// Define functions to provide the begining and end of inventory map
+map<string, pair<Item *, int>>::iterator Inventory::begin() {
+  return inventoryMap.begin();
+}
+map<string, pair<Item *, int>>::iterator Inventory::end() {
+  return inventoryMap.end();
+}
+map<string, pair<Item *, int>>::const_iterator Inventory::begin() const {
+  return (inventoryMap.begin());
+}
+map<string, pair<Item *, int>>::const_iterator Inventory::end() const {
+  return (inventoryMap.end());
+}
 
-//Define inventory map setter
+// Define inventory map setter
 void Inventory::setInventorymap(map<string, pair<Item *, int>> newmap) {
   inventoryMap = newmap;
 }
 
-//Define inventory map getter
+// Define inventory map getter
 map<string, pair<Item *, int>> Inventory::getInventorymap() const {
   return inventoryMap;
 }

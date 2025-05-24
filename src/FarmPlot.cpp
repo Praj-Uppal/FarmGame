@@ -14,7 +14,7 @@ bool FarmPlot::addPlant(Plant* plant) {
   if (getMaxCapacity() > getCurrentCapacity()) {
     //If not full add plant to vector and increment capacity
     setCurrentCapacity((getCurrentCapacity() + 1));
-    plants.push_back(plant);
+    plants.push_back(plant); //Plant pointer now in vector
     return true;
   } else {
     //If full return false
@@ -38,8 +38,9 @@ vector<Plant*> FarmPlot::getPlants() { return plants; }
 
 // Destructor to deallocate memory for dynamically allocated plants
 // FarmPlot::~FarmPlot() {
-  // for (int i = 0; i < plants.size(); i++) {
-    // delete plants.at(i);
-  // }
-  // plants.clear();
+//   for (int i = 0; i < plants.size(); i++) {
+//     delete plants.at(i);
+//   }
+//   //Clear vector
+//   plants.clear();
 // }
