@@ -21,16 +21,7 @@ WINDOW *create_newwin(int height, int width, int starty, int startx) {
 
 WINDOW *Display::drawMainWindow() {
     WINDOW *borderWin;
-    // Init ncurses
-    initscr(); // This starts curses mode
-    cbreak(); // Catch all keyboard input
-    keypad(stdscr, TRUE); // Allows use of arrow keys
-    noecho(); // Do not echo user input to terminal
-    setlocale(LC_ALL, ""); // This enables unicode support
-    curs_set(0); // This hides the cursor
-    start_color();
-    init_pair(1, COLOR_BLUE, COLOR_BLACK);
-
+    
     int starty = 0;
     int startx = 0;
 
@@ -91,11 +82,45 @@ WINDOW *Display::drawCommandWindow(WINDOW *mainWin) {
     int height = (LINES * 0.15);
 
     int startx = 1;
-    int width = (COLS - 2) * 0.75;
+    int width = (COLS - 2) * 0.70;
     commandWindow = create_newwin(height, width, starty, startx);
     mvwprintw(commandWindow, 0, 1, "Commands");
     wrefresh(commandWindow);
     return commandWindow;
+}
+void Display::drawDays(WINDOW *mainWin, int days) {
+    WINDOW *daysWindow;
+
+    int starty = 1;
+    int height = (LINES * 0.15);
+
+    int startx = (COLS - 2) * 0.70 + 1;
+    int width = (COLS - 2) * 0.05;
+    daysWindow = create_newwin(height, width, starty, startx);
+    mvwprintw(daysWindow, 0, 1, "Days");
+    mvwprintw(daysWindow, 2, 1, "%d", days);
+    wrefresh(daysWindow);
+
+}
+
+void Display::drawCommands(WINDOW *comWin) {
+    int startY = 1;
+    mvwprintw(comWin, startY, 4, "Controls:");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "WASD/Arrows: Move");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "E/Space: Water plant");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "P: Plant menu");
+    wmove(comWin, startY + 1, 4);
+    wprintw(comWin, "H: Harvest");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "O: Open shop");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "N: Next day");
+    wprintw(comWin,"    "); 
+    wprintw(comWin, "Q: Quit");
+    wrefresh(comWin);
 }
 WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
     WINDOW *gameWindow;
@@ -197,12 +222,14 @@ void Display::drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots) {
             wmove(plotWin, (std::get<0>(plants[j]->getPosistion()) + 1), (std::get<1>(plants[j]->getPosistion())) + 1);
             switch (plants[j]->getGrowthStage()) {
                 case 0:
+                case 1:
                     waddwstr(plotWin, L"▢");
                     break;
-                case 1:
+                case 2:
                     waddwstr(plotWin, L"▨");
                     break;
-                case 2:
+                case 3:
+                default:
                     waddwstr(plotWin, L"▩");
                     break;
             }

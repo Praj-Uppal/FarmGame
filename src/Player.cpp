@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <ncurses.h>
 
 coord origin = {0, 0};
 
@@ -17,11 +18,21 @@ Player::Player()
 // }  // Just need to delete inventory pointer only since dynamically allocated
 
 // Define get methods
-coord Player::getPosition() const { return position; }
-coord Player::getPrevPosition() const { return prevPosition; }
-int Player::getDirection() const { return direction; }
-Inventory* Player::getPlayersInventory() const { return playersInventory; }
-int Player::getMoney() const { return money; }
+coord Player::getPosition() const { 
+    return position; 
+}
+coord Player::getPrevPosition() const { 
+    return prevPosition; 
+}
+int Player::getDirection() const { 
+    return direction; 
+}
+Inventory* Player::getPlayersInventory() const { 
+    return playersInventory; 
+}
+int Player::getMoney() const { 
+    return money; 
+}
 
 // Define set Methods
 void Player::setPosition(coord newpos) {

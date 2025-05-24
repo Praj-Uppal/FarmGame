@@ -2,7 +2,7 @@
 
 
 bool Entity::isMature() const {
-    if (growthStage == growthRequired) {
+    if (growthStage >= growthRequired) {
         return true;
     } else {
         return false;

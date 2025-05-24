@@ -6,6 +6,6 @@ int main() {
     GameManager game;
     game.initializeGame();
     game.gameLoop();
-    game.cleanup();
+    // game.cleanup();
     return 0;
 }

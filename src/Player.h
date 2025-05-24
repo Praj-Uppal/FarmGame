@@ -4,6 +4,7 @@
 #include "Inventory.h"
 #include"PotatoPlant.h"
 #include"CarrotPlant.h"
+#include <ncurses.h>
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <iostream>
