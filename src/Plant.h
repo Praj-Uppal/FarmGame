@@ -14,7 +14,7 @@ class Plant : public Entity {
         bool watered;
 
     public:
-        Plant(tuple<int, int> position, int growthRequired, int careRequired);
+        Plant(tuple<int, int> position, int growthRequired, int careRequired,string name);
 
         // Positional data
         void setPosition(tuple<int, int> pos);
