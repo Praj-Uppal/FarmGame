@@ -9,6 +9,9 @@ class Item;
 class Animal : public Entity
 {
 public:
+	Animal() = default;
+	virtual ~Animal() = default;
+
 	// Virtual function which has to be implemented in the individual animals classes as
 	// different animals have different evolution requirements
 	virtual void raise() = 0;
