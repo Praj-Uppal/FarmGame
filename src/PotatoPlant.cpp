@@ -1,6 +1,5 @@
 #include "PotatoPlant.h"
 #include "Plant.h"
-#include"Allincludes.h"
 #include <vector>
 
 PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 7, 3) {

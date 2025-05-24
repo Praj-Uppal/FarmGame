@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "Allincludes.h"
 #include "Inventory.h"
+#include <iterator>
 #include <locale.h>
 #include <ncurses.h>
 #include <sstream>
@@ -136,6 +137,15 @@ void Display::drawPlayer(WINDOW *gameWin, Player player) {
     int playerY = std::get<0>(player.getPosition());
     int playerX = std::get<1>(player.getPosition());
 
+    int prevPlayerY = std::get<0>(player.getPrevPosition());
+    int prevPlayerX = std::get<1>(player.getPrevPosition());
+
+    // Delete old player char since its moving
+    if (prevPlayerX != 0 && prevPlayerY != 0) {
+        wmove(gameWin, prevPlayerY, prevPlayerX);
+        waddch(gameWin, ' ');
+    }
+
     wmove(gameWin, playerY, playerX);
     waddwstr(gameWin, L"☺"); // display player head
 
@@ -193,6 +203,10 @@ int main() {
     Display::drawInventory(invWin, testPlayer);
     testPlayer.move(coord{4, 5});
     // testPlayer.setDirection(0);
+    Display::drawPlayer(gameWin, testPlayer);
+    getchar();
+    testPlayer.move(coord{8, 5});
+    testPlayer.setDirection(0);
     Display::drawPlayer(gameWin, testPlayer);
     getchar();
     endwin();

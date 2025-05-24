@@ -16,6 +16,7 @@ class Player {
   // Player attributes including position, facing direction, player inventory
   // and thier money.
   coord position;
+  coord prevPosition;
   int direction;
   Inventory* playersInventory;
   int money;
@@ -26,6 +27,7 @@ class Player {
 
   //Declare Get methods for variables
   coord getPosition() const;
+  coord getPrevPosition() const;
   int getDirection() const;
   Inventory* getPlayersInventory() const;
   int getMoney() const;

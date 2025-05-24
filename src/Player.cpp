@@ -6,18 +6,23 @@ coord origin = {0, 0};
 // money. Also intialize player inventory.
 Player::Player()
     : position(origin),
+      prevPosition(origin),
       direction(2),
       playersInventory(new Inventory()),
       money(0) {};
 
 // Define get methods
 coord Player::getPosition() const { return position; }
+coord Player::getPrevPosition() const { return prevPosition; }
 int Player::getDirection() const { return direction; }
 Inventory* Player::getPlayersInventory() const { return playersInventory; }
 int Player::getMoney() const { return money; }
 
 // Define set Methods
-void Player::setPosition(coord newpos) { position = newpos; }
+void Player::setPosition(coord newpos) { 
+    prevPosition = position;
+    position = newpos; 
+}
 void Player::setDirection(int dir) { direction = dir; }
 void Player::setPlayersInventory(Inventory* newinv) {
   delete playersInventory;
