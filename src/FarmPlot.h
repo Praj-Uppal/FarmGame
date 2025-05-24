@@ -21,7 +21,7 @@ class FarmPlot : public Plot {
   //Declare functions
   bool addPlant(Plant* plant);
   bool removePlant(int index);
-  vector<Plant*> getPlants();
+  vector<Plant*>& getPlants();
 
   //Declare destructor
   // ~FarmPlot();

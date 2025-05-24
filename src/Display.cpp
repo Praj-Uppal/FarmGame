@@ -120,6 +120,9 @@ void Display::drawCommands(WINDOW *comWin) {
     wprintw(comWin, "N: Next day");
     wprintw(comWin,"    "); 
     wprintw(comWin, "Q: Quit");
+    wprintw(comWin,"    "); 
+    wmove(comWin, startY + 2, 4);
+    wprintw(comWin, "Esc: Close Dynamic window");
     wrefresh(comWin);
 }
 WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
@@ -147,17 +150,17 @@ void Display::drawInventory(WINDOW *invWin, Player player) {
 
         string invEntry;
         std::stringstream formatter;
-        formatter << index->first << ": " << index->second.second << " ";
+        formatter << index->first << ": " << (index->second.second - 1) << " ";
         invEntry = formatter.str();
 
         int invWidth = (COLS - 2) * 0.75;
         // If too big for one line, new line in inventory
-        if ((invWidth / (10 * (horiCount + 1))) < 1) {
+        if ((invWidth / (11 * (horiCount + 1))) < 1) {
             horiCount = 0;
             vertCount++;
         }
     
-        wmove(invWin, vertCount, 2 + (10 * (horiCount - 1)));
+        wmove(invWin, vertCount, 2 + (11 * (horiCount - 1)));
         wprintw(invWin, "%s", invEntry.c_str());
 
         wrefresh(invWin);

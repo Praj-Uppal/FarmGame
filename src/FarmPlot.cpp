@@ -24,7 +24,7 @@ bool FarmPlot::addPlant(Plant* plant) {
 
 // Function to remove plant from a plot
 bool FarmPlot::removePlant(int index) {
-  if (index > getPlants().size()) {
+  if (index >= getPlants().size()) {
     return false;
   } else {
     // Deallocate the memory for the plant
@@ -34,7 +34,7 @@ bool FarmPlot::removePlant(int index) {
     return true;
   }
 }
-vector<Plant*> FarmPlot::getPlants() { return plants; }
+vector<Plant*>& FarmPlot::getPlants() { return plants; }
 
 // Destructor to deallocate memory for dynamically allocated plants
 // FarmPlot::~FarmPlot() {

@@ -19,6 +19,7 @@ private:
     bool gameRunning;
     bool plantMenuOpen;
     bool harvestMenuOpen;
+    bool shopOpen;
     vector<FarmPlot> plots;
     
     // Windows for different UI sections
@@ -66,6 +67,8 @@ public:
     void setPlantMenuOpen(bool status);
     bool getHarvestMenuOpen();
     void setHarvestMenuOpen(bool status);
+    bool getShopOpen();
+    void setShopOpen(bool status);
 };
 
 #endif

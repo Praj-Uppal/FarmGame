@@ -15,6 +15,7 @@ class Plant : public Entity {
 
     public:
         Plant(tuple<int, int> position, int growthRequired, int careRequired,string name);
+        virtual ~Plant() = default;
 
         // Positional data
         void setPosition(tuple<int, int> pos);

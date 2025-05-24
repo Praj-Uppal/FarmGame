@@ -5,7 +5,6 @@
 #include "Item.h"
 #include <ncurses.h>
 #include <string>
-#include <utility>
 
 GameManager::GameManager() : currentDay(1), gameRunning(true) {
     // Init ncurses
@@ -116,6 +115,12 @@ void GameManager::handleInput() {
                 plantAtCurrentPosition("Potato");
             } else if (getHarvestMenuOpen()) {
                 harvestPlot("Potato");
+            } else if (getShopOpen()) {
+                if (player->getMoney() >= 2) {
+                    player->setPlayersMoney(player->getMoney() - 2);
+                    player->getPlayersInventory()->addItem(new Item(4, 2, "Potato"));
+                    Display::drawInventoryWindow(mainWin);
+                }
             } else {
                 showPlantMenu();
             }
@@ -127,6 +132,30 @@ void GameManager::handleInput() {
                 // Plant carrot
             } else if (getHarvestMenuOpen()) {
                 harvestPlot("Carrot");
+            } else if (getShopOpen()) {
+                if (player->getMoney() >= 1) {
+                    player->setPlayersMoney(player->getMoney() - 1);
+                    player->getPlayersInventory()->addItem(new Item(2, 1, "Carrot"));
+                    Display::drawInventoryWindow(mainWin);
+                }
+            }
+            break;
+        case 'j':
+        case 'J':
+            if (getShopOpen()) {
+                if (player->getPlayersInventory()->howMany("Carrot") > 1) {
+                    player->getPlayersInventory()->removeItem("Carrot");
+                    player->setPlayersMoney(player->getMoney()+2);
+                }
+            }
+            break;
+        case 'k':
+        case 'K':
+            if (getShopOpen()) {
+                if (player->getPlayersInventory()->howMany("Potato") > 1) {
+                    player->getPlayersInventory()->removeItem("Potato");
+                    player->setPlayersMoney(player->getMoney()+4);
+                }
             }
             break;
         case 'E':
@@ -146,6 +175,16 @@ void GameManager::handleInput() {
             showHarvestMenu();
 
             break;
+        case 27:
+            setPlantMenuOpen(false);
+            setHarvestMenuOpen(false);
+            setShopOpen(false);
+            Display::drawDynamicWindow(mainWin);
+            break;
+        case 'o':
+        case 'O':
+            openShop();
+            break;
         case 'Q':
         case 'q':
             gameRunning = false;
@@ -153,6 +192,28 @@ void GameManager::handleInput() {
       
     }
 }
+void GameManager::openShop() {
+    setPlantMenuOpen(false);
+    setHarvestMenuOpen(false);
+    setShopOpen(true);
+    Display::drawDynamicWindow(mainWin);
+    mvwprintw(dynWin, 0, 1, "Shop");
+    mvwprintw(dynWin, 1, 1, "C: Buy carrot");
+    mvwprintw(dynWin, 2, 1, "P: Buy potato");
+    mvwprintw(dynWin, 3, 1, "J: Sell carrot");
+    mvwprintw(dynWin, 4, 1, "K: Sell potato");
+
+    wrefresh(dynWin);
+}
+
+bool GameManager::getShopOpen() {
+    return shopOpen;
+}
+void GameManager::setShopOpen(bool status) {
+    shopOpen = status;
+
+}
+
 void GameManager::harvestPlot(string plant) {
     int y = std::get<0>(player->getPosition());
     int x = std::get<1>(player->getPosition());
@@ -180,7 +241,9 @@ void GameManager::harvestPlot(string plant) {
         int rightX = leftX + std::get<1>(i->getDimensions());
     
         if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            for (int j = 0; j < i->getCurrentCapacity(); j++) {
+            // for (int j = 0; j < i->getCurrentCapacity(); j++) {
+                // if (i->getPlants()[j]->isMature()) {
+            for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
                 if (i->getPlants()[j]->isMature()) {
                     if (plant == "Carrot") {
                         i->removePlant(j);
@@ -189,21 +252,28 @@ void GameManager::harvestPlot(string plant) {
                         i->removePlant(j);
                         numOfPotatoes++;
                     }
+                    i->setCurrentCapacity(i->getCurrentCapacity() - 1);
                 }
             }
         }
     }
-    // Item* Carrotb = new Item(2, 1, "Carrot");
-    // player->getPlayersInventory()->addItem(Carrotb, 5);
-    // if (plant == "Carrot") {
-    //     player->getPlayersInventory()->addItem(new Item(2, 1, "Carrot"), 1);
-    // } else if (plant == "Potato") {
-    //     player->getPlayersInventory()->addItem(new Item(4, 2, "Potato"), 1);
-    // }
+    Item* Carrot = new Item(2, 1, "Carrot");
+    Item* Potato = new Item(4, 2, "Potato");
+    int recievedCarrots = (numOfCarrots * 2);
+    int recievedPotatoes = (numOfPotatoes * 4);
+    if (plant == "Carrot") {
+        player->getPlayersInventory()->addItem(Carrot, recievedCarrots);
+    } else if (plant == "Potato") {
+        player->getPlayersInventory()->addItem(Potato, recievedPotatoes);
+    }
+    setHarvestMenuOpen(false);
+    Display::drawDynamicWindow(mainWin);
 }
 void GameManager::showHarvestMenu() {
     setPlantMenuOpen(false);
+    setShopOpen(false);
     setHarvestMenuOpen(true);
+    Display::drawDynamicWindow(mainWin);
     mvwprintw(dynWin, 0, 1, "Harvest");
     int y = std::get<0>(player->getPosition());
     int x = std::get<1>(player->getPosition());
@@ -275,7 +345,7 @@ void GameManager::plantAtCurrentPosition(string plantType) {
         int rightX = leftX + std::get<1>(i->getDimensions());
 
         if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            if (player->getPlayersInventory()->howMany(plantType) > 0) {
+            if (player->getPlayersInventory()->howMany(plantType) > 1) {
 
                 // Map number to position in the plot
                 int yy = currentCap / (std::get<1>(i->getDimensions()) - 2);
@@ -331,7 +401,9 @@ bool GameManager::isValidPosition(coord position) {
     return (x >= 1 && x < width - 1 && y >= 1 && y < height - 1);
 }
 void GameManager::showPlantMenu() {
+    Display::drawDynamicWindow(mainWin);
     setHarvestMenuOpen(false);
+    setShopOpen(false);
     setPlantMenuOpen(true);
     mvwprintw(dynWin, 0, 1, "Plants");
     mvwprintw(dynWin, 1, 1, "C: Plant carrot");
@@ -390,176 +462,4 @@ void GameManager::advanceDay() {
         }
     }
 }
-// void GameManager::advanceDay() {
-//     currentDay++;
-//     vector<Plant*> plants = farmPlot->getPlants();
-//     for (Plant* plant : plants) {
-//         plant->advanceDay();
-//     }
-// }
-// void GameManager::harvestAtCurrentPosition() {
-//     Plant* plant = getPlantAtPosition(player->getposition());
-//     if (plant != nullptr && plant->isMature()) {
-//         vector<tuple<Item*,int>> harvest = plant->harvest();
-//         for (auto& item : harvest) {
-//             player->getPlayersInventory()->addItem(std::get<0>(item), std::get<1>(item));
-//         }
-//        
-//         // Remove plant from farm plot
-//         vector<Plant*> plants = farmPlot->getPlants();
-//         for (int i = 0; i < plants.size(); i++) {
-//             if (plants[i] == plant) {
-//                 farmPlot->removePlant(i);
-//                 break;
-//             }
-//         }
-//     }
-// }
 
-// void GameManager::openShop() {
-//     WINDOW* shopWin = newwin(12, 50, LINES/2 - 6, COLS/2 - 25);
-//     box(shopWin, 0, 0);
-//     mvwprintw(shopWin, 0, 2, " Shop - Money: $%d ", player->getMoney());
-//    
-//     mvwprintw(shopWin, 2, 2, "BUY:");
-//     mvwprintw(shopWin, 3, 2, "1. Carrot Seeds ($1 each)");
-//     mvwprintw(shopWin, 4, 2, "2. Potato Seeds ($2 each)");
-//     mvwprintw(shopWin, 6, 2, "SELL:");
-//     mvwprintw(shopWin, 7, 2, "3. Sell All Items");
-//     mvwprintw(shopWin, 9, 2, "Press 1-3 to select, ESC to exit");
-//    
-//     wrefresh(shopWin);
-//    
-//     int ch = getch();
-//     switch (ch) {
-//         case '1':
-//             if (shop->buyCarrot(1, player)) {
-//                 mvwprintw(shopWin, 10, 2, "Bought 1 Carrot Seed!");
-//             } else {
-//                 mvwprintw(shopWin, 10, 2, "Not enough money!");
-//             }
-//             wrefresh(shopWin);
-//             getch();
-//             break;
-//         case '2':
-//             if (shop->buyPotato(1, player)) {
-//                 mvwprintw(shopWin, 10, 2, "Bought 1 Potato Seed!");
-//             } else {
-//                 mvwprintw(shopWin, 10, 2, "Not enough money!");
-//             }
-//             wrefresh(shopWin);
-//             getch();
-//             break;
-//         case '3':
-//             shop->sellInventory(player);
-//             mvwprintw(shopWin, 10, 2, "Sold all items!");
-//             wrefresh(shopWin);
-//             getch();
-//             break;
-//     }
-//    
-//     delwin(shopWin);
-// }
-//
-// Plant* GameManager::getPlantAtPosition(coord position) {
-//     vector<Plant*> plants = farmPlot->getPlants();
-//     for (Plant* plant : plants) {
-//         if (plant->getPosistion() == position) {
-//             return plant;
-//         }
-//     }
-//     return nullptr;
-// }
-//
-// void GameManager::advanceDay() {
-//     currentDay++;
-//     vector<Plant*> plants = farmPlot->getPlants();
-//     for (Plant* plant : plants) {
-//         plant->advanceDay();
-//     }
-// }
-//
-
-
-// void GameManager::drawFarm() {
-//     // Clear farm area
-//     for (int y = 1; y < FARM_HEIGHT + 1; y++) {
-//         for (int x = 1; x < FARM_WIDTH + 1; x++) {
-//             mvwaddch(farmWin, y, x, '.');
-//         }
-//     }
-//    
-//     // Draw plants
-//     vector<Plant*> plants = farmPlot->getPlants();
-//     for (Plant* plant : plants) {
-//         coord pos = plant->getPosistion();
-//         int x = std::get<0>(pos) + 1;
-//         int y = std::get<1>(pos) + 1;
-//        
-//         char plantChar = 'o'; // Default plant
-//         if (plant->isMature()) {
-//             plantChar = 'O'; // Mature plant
-//         }
-//         if (plant->isWatered()) {
-//             plantChar = '*'; // Watered plant
-//         }
-//        
-//         mvwaddch(farmWin, y, x, plantChar);
-//     }
-//    
-//     // Draw player
-//     coord playerPos = player->getposition();
-//     int px = std::get<0>(playerPos) + 1;
-//     int py = std::get<1>(playerPos) + 1;
-//     mvwaddch(farmWin, py, px, '@');
-// }
-//
-// void GameManager::drawInventory() {
-//     int line = 2;
-//     mvwprintw(inventoryWin, line++, 2, "Money: $%d", player->getMoney());
-//     line++;
-//    
-//     Inventory* inv = player->getPlayersInventory();
-//     for (auto it = inv->begin(); it != inv->end(); ++it) {
-//         if (it->second.second > 0) {
-//             mvwprintw(inventoryWin, line++, 2, "%s: %d", 
-//                      it->first.c_str(), it->second.second);
-//         }
-//     }
-// }
-
-// void GameManager::drawPlayerInfo() {
-//     mvwprintw(infoWin, 2, 2, "Day: %d", currentDay);
-//     mvwprintw(infoWin, 3, 2, "Position: (%d, %d)", 
-//               std::get<0>(player->getposition()), std::get<1>(player->getposition()));
-//    
-//     Plant* currentPlant = getPlantAtPosition(player->getposition());
-//     if (currentPlant != nullptr) {
-//         mvwprintw(infoWin, 5, 2, "Plant here:");
-//         mvwprintw(infoWin, 6, 2, "Growth: %d/%d", 
-//                   currentPlant->getGrowthStage(), currentPlant->getMaxGrowth());
-//         mvwprintw(infoWin, 7, 2, "Care: %d/%d", 
-//                   currentPlant->getCaredForDays(), currentPlant->getCareRequired());
-//         mvwprintw(infoWin, 8, 2, "Watered: %s", currentPlant->isWatered() ? "Yes" : "No");
-//     }
-// }
-
-// void GameManager::drawInstructions() {
-//     int startY = FARM_HEIGHT + INFO_HEIGHT + 6;
-//     mvwprintw(gameWin, startY, 4, "Controls:");
-//     mvwprintw(gameWin, startY + 1, 4, "WASD/Arrows: Move");
-//     mvwprintw(gameWin, startY + 2, 4, "E/Space: Water plant");
-//     mvwprintw(gameWin, startY + 3, 4, "P: Plant menu");
-//     mvwprintw(gameWin, startY + 4, 4, "H: Harvest");
-//     mvwprintw(gameWin, startY + 5, 4, "O: Open shop");
-//     mvwprintw(gameWin, startY + 6, 4, "N: Next day");
-//     mvwprintw(gameWin, startY + 7, 4, "Q: Quit");
-// }
-
-// void GameManager::cleanup() {
-//     if (gameWin) delwin(gameWin);
-//     if (farmWin) delwin(farmWin);
-//     if (inventoryWin) delwin(inventoryWin);
-//     if (infoWin) delwin(infoWin);
-//     endwin();
-// }
