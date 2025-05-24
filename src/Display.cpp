@@ -223,18 +223,34 @@ void Display::drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots) {
                 wattron(plotWin, COLOR_PAIR(1));
             }
             wmove(plotWin, (std::get<0>(plants[j]->getPosistion()) + 1), (std::get<1>(plants[j]->getPosistion())) + 1);
-            switch (plants[j]->getGrowthStage()) {
-                case 0:
-                case 1:
-                    waddwstr(plotWin, L"▢");
-                    break;
-                case 2:
-                    waddwstr(plotWin, L"▨");
-                    break;
-                case 3:
-                default:
-                    waddwstr(plotWin, L"▩");
-                    break;
+            if (plants[j]->getName() == "CarrotPlant") {
+                switch (plants[j]->getGrowthStage()) {
+                    case 0:
+                    case 1:
+                        waddwstr(plotWin, L"▢");
+                        break;
+                    case 2:
+                        waddwstr(plotWin, L"▨");
+                        break;
+                    case 3:
+                    default:
+                        waddwstr(plotWin, L"▩");
+                        break;
+                }
+            } else if (plants[j]->getName() == "PotatoPlant") {
+                switch (plants[j]->getGrowthStage()) {
+                    case 0:
+                    case 1:
+                        waddwstr(plotWin, L"○");
+                        break;
+                    case 2:
+                        waddwstr(plotWin, L"◑");
+                        break;
+                    case 3:
+                    default:
+                        waddwstr(plotWin, L"●");
+                        break;
+                }
             }
             wattroff(plotWin, COLOR_PAIR(1));
         }
