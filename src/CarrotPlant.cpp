@@ -3,7 +3,7 @@
 #include "Plant.h"
 #include <vector>
 
-CarrotPlant::CarrotPlant(tuple<int, int> position) : Plant(position, 5, 2) {
+CarrotPlant::CarrotPlant(tuple<int, int> position) : Plant(position, 5, 2,"CarrotPlant") {
     
 }
 

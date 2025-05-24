@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-
+#include"Allincludes.h"
+using namespace std;
 class Entity {
     protected:
         int growthStage;
@@ -8,6 +9,8 @@ class Entity {
 
         int caredForDays;
         int careRequired;
+
+        string name;
 
     public:
         Entity(int growthRequired, int careRequired);
