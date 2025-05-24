@@ -6,18 +6,23 @@ coord origin = {0, 0};
 // money. Also intialize player inventory.
 Player::Player()
     : position(origin),
+      prevPosition(origin),
       direction(2),
       playersInventory(new Inventory()),
       money(0) {};
 
 // Define get methods
 coord Player::getPosition() const { return position; }
+coord Player::getPrevPosition() const { return prevPosition; }
 int Player::getDirection() const { return direction; }
 Inventory* Player::getPlayersInventory() const { return playersInventory; }
 int Player::getMoney() const { return money; }
 
 // Define set Methods
-void Player::setPosition(coord newpos) { position = newpos; }
+void Player::setPosition(coord newpos) { 
+    prevPosition = position;
+    position = newpos; 
+}
 void Player::setDirection(int dir) { direction = dir; }
 void Player::setPlayersInventory(Inventory* newinv) {
   delete playersInventory;
@@ -46,11 +51,11 @@ void Player::plant(Item* item,FarmPlot* farmplot) {
   
   //Define general plant pointer 
     Plant* p1;
-    if (item == Potato){
+    if (item->getName() == "Potato"){
       //If item is potato, let p1 be a new potato plant
     p1 = new PotatoPlant(this->position);
     }
-    else if (item == Carrot) {
+    else if (item->getName() == "Carrot") {
       //if item is carrot, let p1 be a new carrot plant
     p1 = new CarrotPlant(this->position);
     }
