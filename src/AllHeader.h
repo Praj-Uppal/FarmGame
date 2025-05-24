@@ -1,4 +1,4 @@
-#ifndef AllHEADER_H
+#ifndef ALLHEADER_H
 #define ALLHEADER_H
 
 //Including Custom classes (Order matters)

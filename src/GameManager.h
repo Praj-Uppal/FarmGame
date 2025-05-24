@@ -81,7 +81,7 @@ private:
 
 public:
     GameManager();
-    ~GameManager();
+    // ~GameManager();
     
     // Main game functions
     void initializeGame();

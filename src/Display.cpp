@@ -116,6 +116,7 @@ void Display::drawInventory(WINDOW *invWin, Player player) {
     int horiCount = 1;
     int vertCount = 1;
 
+    mvwprintw(invWin, 0, (COLS - 2) * 0.75 - 15, "Money: $%d", player.getMoney());
     for (auto index = playersInv->begin(); index != playersInv->end();
         index++) {
 
@@ -212,36 +213,36 @@ void Display::drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots) {
     }
 }
 
-int main() {
-    WINDOW *win = Display::drawMainWindow();
-    WINDOW *invWin = Display::drawInventoryWindow(win);
-    Display::drawDynamicWindow(win);
-    Display::drawCommandWindow(win);
-    WINDOW *gameWin = Display::drawGameWindow(win);
-
-    Player testPlayer = Player();
-    Inventory *inv = testPlayer.getPlayersInventory();
-
-    Item* Carroty = new Item(2,1,"Carrot");
-    Item* Potates = new Item(4,2,"Potato");
-    inv->addItem(Carroty);
-    inv->addItem(Potates);
-    inv->addItem(Potates);
-    Display::drawInventory(invWin, testPlayer);
-    testPlayer.move(coord{4, 5});
-    // testPlayer.setDirection(0);
-    Display::drawPlayer(gameWin, testPlayer);
-    CarrotPlant *carrot = new CarrotPlant(coord{0,0});
-    CarrotPlant *carrot2 = new CarrotPlant(coord{0,1});
-    FarmPlot farm = FarmPlot(coord{0,0}, coord{5,4});
-    farm.addPlant(carrot);
-    carrot->waterPlant();
-    carrot->setGrowthStage(2);
-    carrot2->dryPlant();
-    farm.addPlant(carrot2);
-    vector<FarmPlot> test = {farm};
-    Display::drawFarmPlots(gameWin, test);
-    getchar();
-    endwin();
-    return 0;
-}
+// int main() {
+//     WINDOW *win = Display::drawMainWindow();
+//     WINDOW *invWin = Display::drawInventoryWindow(win);
+//     Display::drawDynamicWindow(win);
+//     Display::drawCommandWindow(win);
+//     WINDOW *gameWin = Display::drawGameWindow(win);
+//
+//     Player testPlayer = Player();
+//     Inventory *inv = testPlayer.getPlayersInventory();
+//
+//     Item* Carroty = new Item(2,1,"Carrot");
+//     Item* Potates = new Item(4,2,"Potato");
+//     inv->addItem(Carroty);
+//     inv->addItem(Potates);
+//     inv->addItem(Potates);
+//     Display::drawInventory(invWin, testPlayer);
+//     testPlayer.move(coord{4, 5});
+//     // testPlayer.setDirection(0);
+//     Display::drawPlayer(gameWin, testPlayer);
+//     CarrotPlant *carrot = new CarrotPlant(coord{0,0});
+//     CarrotPlant *carrot2 = new CarrotPlant(coord{0,1});
+//     FarmPlot farm = FarmPlot(coord{0,0}, coord{5,4});
+//     farm.addPlant(carrot);
+//     carrot->waterPlant();
+//     carrot->setGrowthStage(2);
+//     carrot2->dryPlant();
+//     farm.addPlant(carrot2);
+//     vector<FarmPlot> test = {farm};
+//     Display::drawFarmPlots(gameWin, test);
+//     getchar();
+//     endwin();
+//     return 0;
+// }
