@@ -1,6 +1,7 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
 
+#include <vector>
 #include "Allincludes.h"
 #include "Entity.h"
 
@@ -18,7 +19,7 @@ class Animal : public Entity
 {
 public:
 	Animal(int growthRequired, int careRequired);
-	virtual ~Animal() = default;
+	virtual ~Animal();
 
 	// Virtual function which has to be implemented in the individual animals classes as
 	// different animals have different evolution requirements
@@ -27,7 +28,10 @@ public:
 	// Harvests animal and adds to user’s inventory, removes itself from Penn animals array.
 	// As the type of item added to the users inventory, the quantity, and slaughter conditions 
 	// vary, this is a virtual function 
-	virtual class Item slaughter() = 0;
+	virtual std::vector<Item*> slaughter() = 0;
+
+	// Whether animal's growth stage is equal or above the growth required for slaughter
+	bool isMature() const;
 
 	coord getPosition() const;
 	void setPosition(coord value);
