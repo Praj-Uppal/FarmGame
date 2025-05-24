@@ -13,17 +13,17 @@ class Entity {
         string name;
 
     public:
-        Entity(int growthRequired, int careRequired);
-
         // Get information regarding the entity
         bool isMature() const;
         int getGrowthStage();
         int getMaxGrowth();
         int getCaredForDays();
         int getCareRequired();
+        string getName();
         // Set information
         void setCaredForDays(int days);
         void setGrowthStage(int stage);
+        void setName(string name);
 
 
         // Advance day functionality may vary by child class
