@@ -1,11 +1,5 @@
 #include "Entity.h"
 
-Entity::Entity(int care, int growth) {
-    careRequired = care;
-    growthRequired = growth;
-    growthStage = 0;
-    caredForDays = 0;
-}
 
 bool Entity::isMature() const {
     if (growthStage == growthRequired) {
@@ -28,9 +22,16 @@ int Entity::getCaredForDays() {
 int Entity::getCareRequired() {
     return careRequired;
 }
+string Entity::getName() {
+    return name;
+}
+//Set methods for the Entity
 void Entity::setCaredForDays(int days) {
     caredForDays = days;
 }
 void Entity::setGrowthStage(int stage) {
     growthStage = stage;
+}
+void Entity::setName(string name) {
+    this->name = name;
 }

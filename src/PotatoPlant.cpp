@@ -2,7 +2,7 @@
 #include "Plant.h"
 #include <vector>
 
-PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 7, 3) {
+PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 7, 3,"PotatoPlant") {
     
 }
 
