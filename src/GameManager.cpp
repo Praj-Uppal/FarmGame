@@ -78,6 +78,7 @@ void GameManager::initializeGame() {
   dynWin = Display::drawDynamicWindow(mainWin);
   comWin = Display::drawCommandWindow(mainWin);
   gameWin = Display::drawGameWindow(mainWin);
+  errorWin = Display::drawErrorWindow(mainWin);
   // Display information in windows
   Display::drawDays(mainWin, currentDay);
   Display::drawInventory(invWin, *player);
@@ -282,18 +283,17 @@ void GameManager::harvestPlot(string plant) {
             numOfCarrots++;
           }
         }
-      }
-        else if (plant == "Potato") {
-          for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
-            if (i->getPlants()[j]->isMature() &&
-                i->getPlants()[j]->getName() == "PotatoPlant") {
-              i->removePlant(j);
-              numOfPotatoes++;
-            }
+      } else if (plant == "Potato") {
+        for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
+          if (i->getPlants()[j]->isMature() &&
+              i->getPlants()[j]->getName() == "PotatoPlant") {
+            i->removePlant(j);
+            numOfPotatoes++;
           }
         }
       }
     }
+  }
 
   // Define carrot and potato items and add to player inventory
   Item* Carrot = new Item(2, 1, "Carrot");
@@ -311,7 +311,6 @@ void GameManager::harvestPlot(string plant) {
   // update dynamic window
   Display::drawDynamicWindow(mainWin);
 }
-
 
 // Function to show Harvest menu
 void GameManager::showHarvestMenu() {
@@ -423,9 +422,11 @@ void GameManager::plantAtCurrentPosition(string plantType) {
           // Remove item from inventory
           player->getPlayersInventory()->removeItem(plantType);
         }
-
+        else {
+          showFullPlotError();
+        }
       } else {
-        // not enough, show error
+        showInsufficientItemsError();
       }
     }
   }
@@ -547,3 +548,50 @@ void GameManager::advanceDay() {
     }
   }
 }
+
+// Function to show error when players trying to plant in full plot
+void GameManager:: showFullPlotError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setFullPlotError(true);
+  setInsufficientItemsError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "Trying to plant in full");
+  mvwprintw(errorWin, 2, 1, "Plot!");
+  mvwprintw(errorWin, 3, 1, "Move to different plot!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+//For first error, full plot
+bool GameManager::getFullPlotError() {
+  return FullPlotError;
+} 
+//Set method for fullploterror
+void GameManager::setFullPlotError(bool status) {
+  FullPlotError = status;
+} 
+
+// Function to show error when players trying to plant in full plot
+void GameManager:: showInsufficientItemsError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setInsufficientItemsError(true);
+  setFullPlotError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "Insufficient Items to");
+  mvwprintw(errorWin, 2, 1, "Plant!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+//For first error, full plot
+bool GameManager::getInsufficientItemsError() {
+  return InsufficientItemsError;
+} 
+//Set method for fullploterror
+void GameManager::setInsufficientItemsError(bool status) {
+  InsufficientItemsError = status;
+} 

@@ -21,6 +21,8 @@ private:
     bool plantMenuOpen;
     bool harvestMenuOpen;
     bool shopOpen;
+    bool FullPlotError;
+    bool InsufficientItemsError;
     vector<FarmPlot> plots;
     
     // Windows for different UI sections
@@ -29,6 +31,7 @@ private:
     WINDOW* dynWin;
     WINDOW* comWin;
     WINDOW* gameWin;
+    WINDOW* errorWin;
     
 public:
     GameManager();
@@ -52,6 +55,8 @@ public:
     void showShopMenu();
     void showPlantMenu();
     void showHarvestMenu();
+    void showFullPlotError();
+    void showInsufficientItemsError();
     
     // Game actions
 	void movePlayer(Player::MoveDirection direction);
@@ -70,6 +75,10 @@ public:
     void setHarvestMenuOpen(bool status);
     bool getShopOpen();
     void setShopOpen(bool status);
+    bool getFullPlotError();
+    void setFullPlotError(bool status);
+    bool getInsufficientItemsError();
+    void setInsufficientItemsError(bool status);
 };
 
 #endif

@@ -1,15 +1,18 @@
 #include "Display.h"
+
+#include <locale.h>
+#include <ncurses.h>
+
+#include <iterator>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "Allincludes.h"
 #include "CarrotPlant.h"
 #include "FarmPlot.h"
 #include "Inventory.h"
 #include "Plant.h"
-#include <iterator>
-#include <locale.h>
-#include <ncurses.h>
-#include <sstream>
-#include <string>
-#include <vector>
 using std::string;
 
 // General Function to create a new window
@@ -86,10 +89,10 @@ WINDOW *Display::drawInventoryWindow(WINDOW *mainWin) {
 WINDOW *Display::drawDynamicWindow(WINDOW *mainWin) {
   // Create a new window ptr
   WINDOW *dynamicWindow;
-  // Define y starting point to be near top, and height to be entire terminal
-  // height with some space
+  // Define y starting point to be near top, and height to be half of the entire
+  // terminal height with some space
   int starty = 1;
-  int height = (LINES - 2);
+  int height = (LINES / 2 - 1);
   // Define width to be 25% of terminal width from the right side with some
   // space
   int startx = (COLS * 0.75);
@@ -100,6 +103,27 @@ WINDOW *Display::drawDynamicWindow(WINDOW *mainWin) {
   // refresh screen
   wrefresh(dynamicWindow);
   return dynamicWindow;
+}
+
+WINDOW *Display::drawErrorWindow(WINDOW *mainWin) {
+  // Create a new window ptr
+  WINDOW *errorWindow;
+  // Define y starting point near the middle, and height to be half of the
+  // entire terminal height with some space
+  int starty = LINES / 2;
+  int height = (LINES / 2 - 1);
+  // Define width to be 25% of terminal width from the right side with some
+  // space
+  int startx = (COLS * 0.75);
+  int width = (COLS * 0.25) - 1;
+
+  // Create the window using the function defined above and assign to ptr
+  errorWindow = create_newwin(height, width, starty, startx);
+  //Label
+  mvwprintw(errorWindow, 0, 1, "Error Messages");
+  // refresh screen
+  wrefresh(errorWindow);
+  return errorWindow;
 }
 
 WINDOW *Display::drawCommandWindow(WINDOW *mainWin) {
