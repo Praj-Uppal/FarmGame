@@ -262,13 +262,13 @@ void Display::drawPlayer(WINDOW *gameWin, Player player) {
   wmove(compassWin, 1, 1);
 
   // Based on player input display the direction the player is facing
-  if (player.getDirection() == 0) {
+  if (player.getDirection() == Player::MoveDirection::North) {
     waddwstr(compassWin, L"↑");
-  } else if (player.getDirection() == 1) {
+  } else if (player.getDirection() == Player::MoveDirection::East) {
     waddwstr(compassWin, L"→");
-  } else if (player.getDirection() == 2) {
+  } else if (player.getDirection() == Player::MoveDirection::South) {
     waddwstr(compassWin, L"↓");
-  } else if (player.getDirection() == 3) {
+  } else if (player.getDirection() == Player::MoveDirection::West) {
     waddwstr(compassWin, L"←");
   }
   // Refresh windows

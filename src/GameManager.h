@@ -9,6 +9,7 @@
 #include <vector>
 #include"AllHeader.h"
 #include "FarmPlot.h"
+#include "Player.h"
 
 class GameManager {
 private:
@@ -53,8 +54,8 @@ public:
     void showHarvestMenu();
     
     // Game actions
-    void movePlayer(int direction);
-    void waterCurrentPlant();
+	void movePlayer(Player::MoveDirection direction);
+	void waterCurrentPlant();
     void plantAtCurrentPosition(string plant);
     void harvestPlot(string plant);
     void openShop();

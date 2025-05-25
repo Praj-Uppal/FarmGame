@@ -35,7 +35,7 @@ GameManager::GameManager() : currentDay(1), gameRunning(true) {
 
   // Set players initial position
   player->setPosition(coord{vSplit, hSplit * 1.6});
-  player->setDirection(2);
+  player->setDirection(Player::MoveDirection::North);
 
   // Generate farm plots
   FarmPlot farmA = FarmPlot(coord{0, 0}, coord{vSplit - 1, hSplit - 1});
@@ -106,22 +106,22 @@ void GameManager::handleInput() {
     case KEY_UP:
     case 'w':
     case 'W':
-      movePlayer(0);  // North
-      break;
+		  movePlayer(Player::MoveDirection::North);
+		  break;
     case KEY_RIGHT:
     case 'd':
     case 'D':
-      movePlayer(1);  // East
+      movePlayer(Player::MoveDirection::East);
       break;
     case KEY_DOWN:
     case 's':
     case 'S':
-      movePlayer(2);  // South
+      movePlayer(Player::MoveDirection::South);
       break;
     case KEY_LEFT:
     case 'a':
     case 'A':
-      movePlayer(3);  // West
+      movePlayer(Player::MoveDirection::West);
       break;
     case 'p':
     case 'P':  // Key for potato interactions
@@ -242,16 +242,16 @@ void GameManager::harvestPlot(string plant) {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get plot facing in front of them
   switch (player->getDirection()) {
-    case 0:  // North
+    case Player::MoveDirection::North: // North
       y--;
       break;
-    case 1:  // East
+    case Player::MoveDirection::East: // East
       x++;
       break;
-    case 2:  // South
+    case Player::MoveDirection::South: // South
       y++;
       break;
-    case 3:  // West
+    case Player::MoveDirection::West: // West
       x--;
       break;
   }
@@ -317,16 +317,16 @@ void GameManager::showHarvestMenu() {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get plot facing in front of them
   switch (player->getDirection()) {
-    case 0:  // North
+    case Player::MoveDirection::North: // North
       y--;
       break;
-    case 1:  // East
+    case Player::MoveDirection::East: // East
       x++;
       break;
-    case 2:  // South
+    case Player::MoveDirection::South: // South
       y++;
       break;
-    case 3:  // West
+    case Player::MoveDirection::West: // West
       x--;
       break;
   }
@@ -373,16 +373,16 @@ void GameManager::plantAtCurrentPosition(string plantType) {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get coord facing in front of them
   switch (player->getDirection()) {
-    case 0:  // North
+    case Player::MoveDirection::North: // North
       y--;
       break;
-    case 1:  // East
+    case Player::MoveDirection::East: // East
       x++;
       break;
-    case 2:  // South
+    case Player::MoveDirection::South: // South
       y++;
       break;
-    case 3:  // West
+    case Player::MoveDirection::West: // West
       x--;
       break;
   }
@@ -420,23 +420,23 @@ void GameManager::plantAtCurrentPosition(string plantType) {
 }
 
 // Function to move player
-void GameManager::movePlayer(int direction) {
+void GameManager::movePlayer(Player::MoveDirection direction) {
   // Get players coords
   int y = std::get<0>(player->getPosition());
   int x = std::get<1>(player->getPosition());
   // Adjust based on player direction
   if (direction == player->getDirection()) {
     switch (direction) {
-      case 0:  // North
+      case Player::MoveDirection::North:
         y--;
         break;
-      case 1:  // East
+      case Player::MoveDirection::East:
         x++;
         break;
-      case 2:  // South
+      case Player::MoveDirection::South:
         y++;
         break;
-      case 3:  // West
+      case Player::MoveDirection::West:
         x--;
         break;
     }
@@ -494,16 +494,16 @@ void GameManager::waterCurrentPlant() {
   int x = std::get<1>(player->getPosition());
   // Adjust based on direction player is facing
   switch (player->getDirection()) {
-    case 0:  // North
+    case Player::MoveDirection::North:
       y--;
       break;
-    case 1:  // East
+    case Player::MoveDirection::East:
       x++;
       break;
-    case 2:  // South
+    case Player::MoveDirection::South:
       y++;
       break;
-    case 3:  // West
+    case Player::MoveDirection::West:
       x--;
       break;
   }

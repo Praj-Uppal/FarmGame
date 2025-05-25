@@ -13,12 +13,16 @@ typedef tuple<int, int> coord;
 
 using namespace std;
 class Player {
+ public:
+  enum class MoveDirection
+  { North, East, South, West };
+
  protected:
   // Player attributes including position, facing direction, player inventory
   // and thier money.
   coord position;
   coord prevPosition;
-  int direction;
+  MoveDirection direction;
   Inventory* playersInventory;
   int money;
 
@@ -26,18 +30,18 @@ class Player {
   // Player constructor
   Player();
   //Player destructor
-  // ~Player();
+  // ~Player();   
 
   //Declare Get methods for variables
   coord getPosition() const;
   coord getPrevPosition() const;
-  int getDirection() const;
+  MoveDirection getDirection() const;
   Inventory* getPlayersInventory() const;
   int getMoney() const;
 
   //Declare set methods for attributes
   void setPosition(coord newpos);
-  void setDirection(int dir);
+  void setDirection(MoveDirection dir);
   void setPlayersInventory(Inventory* newinv);
   void setPlayersMoney(int newmoney);
 
@@ -56,8 +60,6 @@ class Player {
 
   //Function for planting a new plant into the farmplot
    void plant(Item* item, FarmPlot* farmplot);
-
-
 };
 
 #endif

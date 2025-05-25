@@ -8,7 +8,7 @@ coord origin = {0, 0};
 Player::Player()
     : position(origin),
       prevPosition(origin),
-      direction(2),
+      direction(MoveDirection::North),
       playersInventory(new Inventory()),
       money(0) {};
 
@@ -24,7 +24,7 @@ coord Player::getPosition() const {
 coord Player::getPrevPosition() const { 
     return prevPosition; 
 }
-int Player::getDirection() const { 
+Player::MoveDirection Player::getDirection() const { 
     return direction; 
 }
 Inventory* Player::getPlayersInventory() const { 
@@ -39,7 +39,7 @@ void Player::setPosition(coord newpos) {
   prevPosition = position;
   position = newpos;
 }
-void Player::setDirection(int dir) { direction = dir; }
+void Player::setDirection(Player::MoveDirection dir) { direction = dir; }
 void Player::setPlayersInventory(Inventory* newinv) {
   delete playersInventory; //Deleting the old inventory pointer
   playersInventory = newinv; //Assigning the new inventory pointer
