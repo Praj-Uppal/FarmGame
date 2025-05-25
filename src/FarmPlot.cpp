@@ -2,7 +2,7 @@
 
 #include "Plant.h"
 
-//Define FarmPlot constructor
+// Define FarmPlot constructor
 FarmPlot::FarmPlot(coord topLeft, coord dimension)
     : Plot(topLeft, dimension) {};
 
@@ -12,12 +12,12 @@ FarmPlot::FarmPlot() : Plot(coord(0, 0), coord(20, 20)) {};
 bool FarmPlot::addPlant(Plant* plant) {
   // Check if plot is full
   if (getMaxCapacity() > getCurrentCapacity()) {
-    //If not full add plant to vector and increment capacity
+    // If not full add plant to vector and increment capacity
     setCurrentCapacity((getCurrentCapacity() + 1));
-    plants.push_back(plant); //Plant pointer now in vector
+    plants.push_back(plant);  // Plant pointer now in vector
     return true;
   } else {
-    //If full return false
+    // If full return false
     return false;
   }
 }

@@ -1,32 +1,32 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-#include"Allincludes.h"
+#include "Allincludes.h"
 using namespace std;
 class Entity {
-    protected:
-        int growthStage;
-        int growthRequired;
+ protected:
+  // Define attributes
+  int growthStage;
+  int growthRequired;
 
-        int caredForDays;
-        int careRequired;
+  int caredForDays;
+  int careRequired;
 
-        string name;
+  string name;
 
-    public:
-        // Get information regarding the entity
-        bool isMature() const;
-        int getGrowthStage();
-        int getMaxGrowth();
-        int getCaredForDays();
-        int getCareRequired();
-        string getName();
-        // Set information
-        void setCaredForDays(int days);
-        void setGrowthStage(int stage);
-        void setName(string name);
+ public:
+  // Get methods fpr the entity
+  bool isMature() const;
+  int getGrowthStage();
+  int getMaxGrowth();
+  int getCaredForDays();
+  int getCareRequired();
+  string getName();
+  // Set methods for the entity
+  void setCaredForDays(int days);
+  void setGrowthStage(int stage);
+  void setName(string name);
 
-
-        // Advance day functionality may vary by child class
-        virtual void advanceDay() = 0;
+  // Advance day function must be implemented in the derived classes
+  virtual void advanceDay() = 0;
 };
 #endif

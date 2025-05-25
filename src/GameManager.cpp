@@ -7,459 +7,531 @@
 #include <string>
 
 GameManager::GameManager() : currentDay(1), gameRunning(true) {
-    // Init ncurses
-    initscr(); // This starts curses mode
-    cbreak(); // Catch all keyboard input
-    keypad(stdscr, TRUE); // Allows use of arrow keys
-    noecho(); // Do not echo user input to terminal
-    setlocale(LC_ALL, ""); // This enables unicode support
-    curs_set(0); // This hides the cursor
-    start_color();
-    init_pair(1, COLOR_BLUE, COLOR_BLACK);
+  // Init ncurses
+  initscr();              // This starts curses mode
+  cbreak();               // Catch all keyboard input
+  keypad(stdscr, TRUE);   // Allows use of arrow keys
+  noecho();               // Do not echo user input to terminal
+  setlocale(LC_ALL, "");  // This enables unicode support
+  curs_set(0);            // This hides the cursor
+  start_color();
+  init_pair(1, COLOR_BLUE, COLOR_BLACK);
 
- 
-    player = new Player();
-    farmPlot = new FarmPlot();
-    shop = new Shop();
-    
-    // Give player some starting money and seeds
-    player->setPlayersMoney(100);
+  player = new Player();
+  farmPlot = new FarmPlot();
+  shop = new Shop();
 
-    Item* Carrot = new Item(2, 1, "Carrot");
-    Item* Potato = new Item(4,2,"Potato");
-    player->getPlayersInventory()->addItem(Carrot, 5);
-    player->getPlayersInventory()->addItem(Potato, 3);
+  // Give player some starting money and seeds
+  player->setPlayersMoney(100);
 
-    // breaks up game window into segments
-    int vSplit = ((LINES - (LINES * 0.30) - 1) / 3);
-    int hSplit = ((COLS - 2) * 0.75 ) / 5;
+  Item* Carrot = new Item(2, 1, "Carrot");
+  Item* Potato = new Item(4, 2, "Potato");
+  player->getPlayersInventory()->addItem(Carrot, 5);
+  player->getPlayersInventory()->addItem(Potato, 3);
 
-    // Set players initial position
-    player->setPosition(coord{vSplit, hSplit * 1.6});
-    player->setDirection(2);
+  // breaks up game window into segments
+  int vSplit = ((LINES - (LINES * 0.30) - 1) / 3);
+  int hSplit = ((COLS - 2) * 0.75) / 5;
 
-    // Generate farm plots
-    FarmPlot farmA = FarmPlot(coord{0,0}, coord{vSplit - 1, hSplit - 1});
-    FarmPlot farmB = FarmPlot(coord{vSplit,0}, coord{vSplit - 1, hSplit - 1});
-    FarmPlot farmC = FarmPlot(coord{vSplit * 2,0}, coord{vSplit - 1, hSplit - 1});
-    FarmPlot farmD = FarmPlot(coord{0,hSplit}, coord{vSplit - 1, (hSplit * 1.3) - 1});
-    FarmPlot farmE = FarmPlot(coord{vSplit,hSplit}, coord{vSplit - 1, (hSplit * 1.3) - 1});
-    FarmPlot farmF = FarmPlot(coord{vSplit * 2,hSplit}, coord{vSplit - 1, (hSplit * 1.3) - 1});
-    FarmPlot farmG = FarmPlot(coord{0,hSplit * 2.3}, coord{vSplit - 1, (hSplit) - 1});
-    FarmPlot farmH = FarmPlot(coord{vSplit,hSplit * 2.3}, coord{vSplit - 1, (hSplit) - 1});
-    FarmPlot farmI = FarmPlot(coord{vSplit * 2,hSplit * 2.3}, coord{vSplit - 1, (hSplit) - 1});
-    FarmPlot farmJ = FarmPlot(coord{0,hSplit * 3.3}, coord{vSplit * 3 - 1, (hSplit) - 1});
-    plots.push_back(farmA);
-    plots.push_back(farmB);
-    plots.push_back(farmC);
-    plots.push_back(farmD);
-    plots.push_back(farmE);
-    plots.push_back(farmF);
-    plots.push_back(farmG);
-    plots.push_back(farmH);
-    plots.push_back(farmI);
-    plots.push_back(farmJ);
+  // Set players initial position
+  player->setPosition(coord{vSplit, hSplit * 1.6});
+  player->setDirection(2);
+
+  // Generate farm plots
+  FarmPlot farmA = FarmPlot(coord{0, 0}, coord{vSplit - 1, hSplit - 1});
+  FarmPlot farmB = FarmPlot(coord{vSplit, 0}, coord{vSplit - 1, hSplit - 1});
+  FarmPlot farmC =
+      FarmPlot(coord{vSplit * 2, 0}, coord{vSplit - 1, hSplit - 1});
+  FarmPlot farmD =
+      FarmPlot(coord{0, hSplit}, coord{vSplit - 1, (hSplit * 1.3) - 1});
+  FarmPlot farmE =
+      FarmPlot(coord{vSplit, hSplit}, coord{vSplit - 1, (hSplit * 1.3) - 1});
+  FarmPlot farmF = FarmPlot(coord{vSplit * 2, hSplit},
+                            coord{vSplit - 1, (hSplit * 1.3) - 1});
+  FarmPlot farmG =
+      FarmPlot(coord{0, hSplit * 2.3}, coord{vSplit - 1, (hSplit)-1});
+  FarmPlot farmH =
+      FarmPlot(coord{vSplit, hSplit * 2.3}, coord{vSplit - 1, (hSplit)-1});
+  FarmPlot farmI =
+      FarmPlot(coord{vSplit * 2, hSplit * 2.3}, coord{vSplit - 1, (hSplit)-1});
+  FarmPlot farmJ =
+      FarmPlot(coord{0, hSplit * 3.3}, coord{vSplit * 3 - 1, (hSplit)-1});
+  plots.push_back(farmA);
+  plots.push_back(farmB);
+  plots.push_back(farmC);
+  plots.push_back(farmD);
+  plots.push_back(farmE);
+  plots.push_back(farmF);
+  plots.push_back(farmG);
+  plots.push_back(farmH);
+  plots.push_back(farmI);
+  plots.push_back(farmJ);
 }
-
+// Function to initialise game
 void GameManager::initializeGame() {
-    mainWin = Display::drawMainWindow();
-    invWin = Display::drawInventoryWindow(mainWin);
-    dynWin = Display::drawDynamicWindow(mainWin);
-    comWin = Display::drawCommandWindow(mainWin);
-    gameWin = Display::drawGameWindow(mainWin);
-    Display::drawDays(mainWin, currentDay);
-    Display::drawInventory(invWin, *player);
-    Display::drawFarmPlots(gameWin, plots);
-    Display::drawPlayer(gameWin, *player);
-    Display::drawCommands(comWin);
+  // Draw windows, and assign windows
+  mainWin = Display::drawMainWindow();
+  invWin = Display::drawInventoryWindow(mainWin);
+  dynWin = Display::drawDynamicWindow(mainWin);
+  comWin = Display::drawCommandWindow(mainWin);
+  gameWin = Display::drawGameWindow(mainWin);
+  // Display information in windows
+  Display::drawDays(mainWin, currentDay);
+  Display::drawInventory(invWin, *player);
+  Display::drawFarmPlots(gameWin, plots);
+  Display::drawPlayer(gameWin, *player);
+  Display::drawCommands(comWin);
 }
-
+// Function to manage gameloop
 void GameManager::gameLoop() {
-    while (gameRunning) {
-        updateDisplay();
-        handleInput();
-    }
+  // While game is running continously update display, and handle input
+  while (gameRunning) {
+    updateDisplay();
+    handleInput();
+  }
 }
+// Update display function
 void GameManager::updateDisplay() {
-    Display::drawFarmPlots(gameWin, plots);
-    Display::drawPlayer(gameWin, *player);
-    Display::drawInventory(invWin, *player);
+  // Updates information in windows like inventory and main game window
+  Display::drawFarmPlots(gameWin, plots);
+  Display::drawPlayer(gameWin, *player);
+  Display::drawInventory(invWin, *player);
 }
+// Function to handle input
 void GameManager::handleInput() {
-    int ch = getchar();
-    switch (ch) {
-        case KEY_UP:
-        case 'w':
-        case 'W':
-            movePlayer(0); // North
-            break;
-        case KEY_RIGHT:
-        case 'd':
-        case 'D':
-            movePlayer(1); // East
-            break;
-        case KEY_DOWN:
-        case 's':
-        case 'S':
-            movePlayer(2); // South
-            break;
-        case KEY_LEFT:
-        case 'a':
-        case 'A':
-            movePlayer(3); // West
-            break;
-        case 'p':
-        case 'P':
-            if (getPlantMenuOpen()) {
-                // Plant potato
-                plantAtCurrentPosition("Potato");
-            } else if (getHarvestMenuOpen()) {
-                harvestPlot("Potato");
-            } else if (getShopOpen()) {
-                if (player->getMoney() >= 2) {
-                    player->setPlayersMoney(player->getMoney() - 2);
-                    player->getPlayersInventory()->addItem(new Item(4, 2, "Potato"));
-                    Display::drawInventoryWindow(mainWin);
-                }
-            } else {
-                showPlantMenu();
-            }
-            break;
-        case 'c':
-        case 'C':
-            if (getPlantMenuOpen()) {
-                plantAtCurrentPosition("Carrot");
-                // Plant carrot
-            } else if (getHarvestMenuOpen()) {
-                harvestPlot("Carrot");
-            } else if (getShopOpen()) {
-                if (player->getMoney() >= 1) {
-                    player->setPlayersMoney(player->getMoney() - 1);
-                    player->getPlayersInventory()->addItem(new Item(2, 1, "Carrot"));
-                    Display::drawInventoryWindow(mainWin);
-                }
-            }
-            break;
-        case 'j':
-        case 'J':
-            if (getShopOpen()) {
-                if (player->getPlayersInventory()->howMany("Carrot") > 1) {
-                    player->getPlayersInventory()->removeItem("Carrot");
-                    player->setPlayersMoney(player->getMoney()+2);
-                }
-            }
-            break;
-        case 'k':
-        case 'K':
-            if (getShopOpen()) {
-                if (player->getPlayersInventory()->howMany("Potato") > 1) {
-                    player->getPlayersInventory()->removeItem("Potato");
-                    player->setPlayersMoney(player->getMoney()+4);
-                }
-            }
-            break;
-        case 'E':
-        case 'e':
-        case KEY_ENTER:
-        case '\n':
-        case '\r':
-            waterCurrentPlant();
-            break;
-        case 'N':
-        case 'n':
-            advanceDay();
-            Display::drawDays(mainWin, currentDay);
-            break;
-        case 'H':
-        case 'h':
-            showHarvestMenu();
-
-            break;
-        case 27:
-            setPlantMenuOpen(false);
-            setHarvestMenuOpen(false);
-            setShopOpen(false);
-            Display::drawDynamicWindow(mainWin);
-            break;
-        case 'o':
-        case 'O':
-            openShop();
-            break;
-        case 'Q':
-        case 'q':
-            gameRunning = false;
-            break;
-      
-    }
+  // Gets char pressed
+  int ch = getchar();
+  // Based on the key pressed, different actions
+  switch (ch) {
+    case KEY_UP:
+    case 'w':
+    case 'W':
+      movePlayer(0);  // North
+      break;
+    case KEY_RIGHT:
+    case 'd':
+    case 'D':
+      movePlayer(1);  // East
+      break;
+    case KEY_DOWN:
+    case 's':
+    case 'S':
+      movePlayer(2);  // South
+      break;
+    case KEY_LEFT:
+    case 'a':
+    case 'A':
+      movePlayer(3);  // West
+      break;
+    case 'p':
+    case 'P':  // Key for potato interactions
+      if (getPlantMenuOpen()) {
+        // Plant potato if plant menu open
+        plantAtCurrentPosition("Potato");
+      } else if (getHarvestMenuOpen()) {
+        // harvest potato if potato menu open
+        harvestPlot("Potato");
+      } else if (getShopOpen()) {
+        // If shop open try to buy potato
+        if (player->getMoney() >= 2) {
+          player->setPlayersMoney(player->getMoney() - 2);
+          player->getPlayersInventory()->addItem(new Item(4, 2, "Potato"));
+          // Update inventory
+          Display::drawInventoryWindow(mainWin);
+        }
+      } else {
+        // On default show plant menu
+        showPlantMenu();
+      }
+      break;
+    case 'c':
+    case 'C':  // Carrot interactions
+      if (getPlantMenuOpen()) {
+        plantAtCurrentPosition("Carrot");
+        // Plant carrot if plant menu open
+      } else if (getHarvestMenuOpen()) {
+        harvestPlot("Carrot");     // Harvest carrot if harvest menu open
+      } else if (getShopOpen()) {  // If shop menu open, buy carrot
+        if (player->getMoney() >= 1) {
+          player->setPlayersMoney(player->getMoney() - 1);
+          player->getPlayersInventory()->addItem(new Item(2, 1, "Carrot"));
+          Display::drawInventoryWindow(mainWin);
+        }
+      }
+      break;
+    case 'j':
+    case 'J':  // Key to sell carrot when shop open
+      if (getShopOpen()) {
+        if (player->getPlayersInventory()->howMany("Carrot") > 1) {
+          player->getPlayersInventory()->removeItem("Carrot");
+          player->setPlayersMoney(player->getMoney() + 2);
+        }
+      }
+      break;
+    case 'k':
+    case 'K':  // key to sell potato when shop open
+      if (getShopOpen()) {
+        if (player->getPlayersInventory()->howMany("Potato") > 1) {
+          player->getPlayersInventory()->removeItem("Potato");
+          player->setPlayersMoney(player->getMoney() + 4);
+        }
+      }
+      break;
+    case 'E':
+    case 'e':
+    case KEY_ENTER:
+    case '\n':
+    case '\r':
+      waterCurrentPlant();
+      break;
+    case 'N':
+    case 'n':  // Key to advance day
+      advanceDay();
+      // Updates day counter
+      Display::drawDays(mainWin, currentDay);
+      break;
+    case 'H':
+    case 'h':  // Opens harvest menu
+      showHarvestMenu();
+      break;
+    case 27:  // Clear dynamic window
+      setPlantMenuOpen(false);
+      setHarvestMenuOpen(false);
+      setShopOpen(false);
+      Display::drawDynamicWindow(mainWin);
+      break;
+    case 'o':
+    case 'O':  // Key to open shop
+      openShop();
+      break;
+    case 'Q':
+    case 'q':  // Key to quit game
+      gameRunning = false;
+      break;
+  }
 }
+// Function to open shop
 void GameManager::openShop() {
-    setPlantMenuOpen(false);
-    setHarvestMenuOpen(false);
-    setShopOpen(true);
-    Display::drawDynamicWindow(mainWin);
-    mvwprintw(dynWin, 0, 1, "Shop");
-    mvwprintw(dynWin, 1, 1, "C: Buy carrot");
-    mvwprintw(dynWin, 2, 1, "P: Buy potato");
-    mvwprintw(dynWin, 3, 1, "J: Sell carrot");
-    mvwprintw(dynWin, 4, 1, "K: Sell potato");
+  // Close plant and harvest menu if open
+  setPlantMenuOpen(false);
+  setHarvestMenuOpen(false);
+  // Open shop menu
+  setShopOpen(true);
+  // Update dynamic window
+  Display::drawDynamicWindow(mainWin);
+  // Add Labels
+  mvwprintw(dynWin, 0, 1, "Shop");
+  mvwprintw(dynWin, 1, 1, "C: Buy carrot");
+  mvwprintw(dynWin, 2, 1, "P: Buy potato");
+  mvwprintw(dynWin, 3, 1, "J: Sell carrot");
+  mvwprintw(dynWin, 4, 1, "K: Sell potato");
 
-    wrefresh(dynWin);
+  // Refresh dynamic window
+  wrefresh(dynWin);
 }
 
-bool GameManager::getShopOpen() {
-    return shopOpen;
-}
-void GameManager::setShopOpen(bool status) {
-    shopOpen = status;
+// Function to return shop menu status
+bool GameManager::getShopOpen() { return shopOpen; }
+// Function to set shop menu status
+void GameManager::setShopOpen(bool status) { shopOpen = status; }
 
-}
-
+// Function to harvest plot
 void GameManager::harvestPlot(string plant) {
-    int y = std::get<0>(player->getPosition());
-    int x = std::get<1>(player->getPosition());
-    switch (player->getDirection()) {
-        case 0: // North
-            y--;
-            break;
-        case 1: // East
-            x++;
-            break;
-        case 2: // South
-            y++;
-            break;
-        case 3: // West
-            x--;
-            break;
-    }
-    int numOfCarrots = 0;
-    int numOfPotatoes = 0;
-    for (auto i = plots.begin(); i != plots.end(); i++) {
-        int currentCap = i->getCurrentCapacity();
-        int topY = std::get<0>(i->getTopLeftCoord());
-        int leftX = std::get<1>(i->getTopLeftCoord());
-        int bottomY = topY + std::get<0>(i->getDimensions());
-        int rightX = leftX + std::get<1>(i->getDimensions());
-    
-        if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            // for (int j = 0; j < i->getCurrentCapacity(); j++) {
-                // if (i->getPlants()[j]->isMature()) {
-            for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
-                if (i->getPlants()[j]->isMature()) {
-                    if (plant == "Carrot") {
-                        i->removePlant(j);
-                        numOfCarrots++;
-                    } else if (plant == "Potato") {
-                        i->removePlant(j);
-                        numOfPotatoes++;
-                    }
-                    i->setCurrentCapacity(i->getCurrentCapacity() - 1);
-                }
-            }
+  // Get player coordinates
+  int y = std::get<0>(player->getPosition());
+  int x = std::get<1>(player->getPosition());
+  // Based on player direction, get plot facing in front of them
+  switch (player->getDirection()) {
+    case 0:  // North
+      y--;
+      break;
+    case 1:  // East
+      x++;
+      break;
+    case 2:  // South
+      y++;
+      break;
+    case 3:  // West
+      x--;
+      break;
+  }
+  // initialise carrot and potato count to 0
+  int numOfCarrots = 0;
+  int numOfPotatoes = 0;
+  // Loop through plots
+  for (auto i = plots.begin(); i != plots.end(); i++) {
+    int currentCap = i->getCurrentCapacity();
+    int topY = std::get<0>(i->getTopLeftCoord());
+    int leftX = std::get<1>(i->getTopLeftCoord());
+    int bottomY = topY + std::get<0>(i->getDimensions());
+    int rightX = leftX + std::get<1>(i->getDimensions());
+
+    if (y > topY && y < bottomY && x > leftX && x < rightX) {
+      // for (int j = 0; j < i->getCurrentCapacity(); j++) {
+      // if (i->getPlants()[j]->isMature()) {
+      // loop over plants in plot and check if mature
+      for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
+        // If mature, increment carrot or potato count
+        if (i->getPlants()[j]->isMature()) {
+          if (plant == "Carrot") {
+            i->removePlant(j);
+            numOfCarrots++;
+          } else if (plant == "Potato") {
+            i->removePlant(j);
+            numOfPotatoes++;
+          }
+          i->setCurrentCapacity(i->getCurrentCapacity() - 1);
         }
+      }
     }
-    Item* Carrot = new Item(2, 1, "Carrot");
-    Item* Potato = new Item(4, 2, "Potato");
-    int recievedCarrots = (numOfCarrots * 2);
-    int recievedPotatoes = (numOfPotatoes * 4);
-    if (plant == "Carrot") {
-        player->getPlayersInventory()->addItem(Carrot, recievedCarrots);
-    } else if (plant == "Potato") {
-        player->getPlayersInventory()->addItem(Potato, recievedPotatoes);
-    }
-    setHarvestMenuOpen(false);
-    Display::drawDynamicWindow(mainWin);
+  }
+  // Define carrot and potato items and add to player inventory
+  Item* Carrot = new Item(2, 1, "Carrot");
+  Item* Potato = new Item(4, 2, "Potato");
+  int recievedCarrots = (numOfCarrots * 2);
+  int recievedPotatoes = (numOfPotatoes * 4);
+  // Add to player inventory
+  if (plant == "Carrot") {
+    player->getPlayersInventory()->addItem(Carrot, recievedCarrots);
+  } else if (plant == "Potato") {
+    player->getPlayersInventory()->addItem(Potato, recievedPotatoes);
+  }
+  // close harvest menu
+  setHarvestMenuOpen(false);
+  // update dynamic window
+  Display::drawDynamicWindow(mainWin);
 }
+
+// Function to show Harvest menu
 void GameManager::showHarvestMenu() {
-    setPlantMenuOpen(false);
-    setShopOpen(false);
-    setHarvestMenuOpen(true);
-    Display::drawDynamicWindow(mainWin);
-    mvwprintw(dynWin, 0, 1, "Harvest");
-    int y = std::get<0>(player->getPosition());
-    int x = std::get<1>(player->getPosition());
-    switch (player->getDirection()) {
-        case 0: // North
-            y--;
-            break;
-        case 1: // East
-            x++;
-            break;
-        case 2: // South
-            y++;
-            break;
-        case 3: // West
-            x--;
-            break;
-    }
-    int numOfCarrots = 0;
-    int numOfPotatoes = 0;
-    for (auto i = plots.begin(); i != plots.end(); i++) {
-        int currentCap = i->getCurrentCapacity();
-        int topY = std::get<0>(i->getTopLeftCoord());
-        int leftX = std::get<1>(i->getTopLeftCoord());
-        int bottomY = topY + std::get<0>(i->getDimensions());
-        int rightX = leftX + std::get<1>(i->getDimensions());
-    
-        if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            for (int j = 0; j < i->getCurrentCapacity(); j++) {
-                if (i->getPlants()[j]->isMature()) {
-                    if (i->getPlants()[j]->getName() == "CarrotPlant") {
-                        numOfCarrots++;
-                    } else if (i->getPlants()[j]->getName() == "PotatoPlant") {
-                        numOfPotatoes++;
-                    }
-                    mvwprintw(dynWin, 8, 1, "test  %s", i->getPlants()[j]->getName().c_str());
-                }
-            }
-        }
-    }
-    mvwprintw(dynWin, 1, 1, "Potatoes ready: %d", numOfPotatoes);
-    mvwprintw(dynWin, 2, 1, "Carrots ready: %d", numOfCarrots);
-    mvwprintw(dynWin, 3, 1, "C: Harvest carrots");
-    mvwprintw(dynWin, 4, 1, "P: Harvest potatoes");
+  // Close other menus and open Harvest menu
+  setPlantMenuOpen(false);
+  setShopOpen(false);
+  setHarvestMenuOpen(true);
+  // Draw Dynamic window
+  Display::drawDynamicWindow(mainWin);
+  // Label
+  mvwprintw(dynWin, 0, 1, "Harvest");
+  // Get player coords
+  int y = std::get<0>(player->getPosition());
+  int x = std::get<1>(player->getPosition());
+  // Based on player direction, get plot facing in front of them
+  switch (player->getDirection()) {
+    case 0:  // North
+      y--;
+      break;
+    case 1:  // East
+      x++;
+      break;
+    case 2:  // South
+      y++;
+      break;
+    case 3:  // West
+      x--;
+      break;
+  }
+  // Initialize number of carrots and potatoes in plot facing in front of them
+  int numOfCarrots = 0;
+  int numOfPotatoes = 0;
+  // Iterate through plots and check if plot is the one player is facing
+  for (auto i = plots.begin(); i != plots.end(); i++) {
+    int currentCap = i->getCurrentCapacity();
+    int topY = std::get<0>(i->getTopLeftCoord());
+    int leftX = std::get<1>(i->getTopLeftCoord());
+    int bottomY = topY + std::get<0>(i->getDimensions());
+    int rightX = leftX + std::get<1>(i->getDimensions());
 
-    wrefresh(dynWin);
+    if (y > topY && y < bottomY && x > leftX && x < rightX) {
+      // For the right plot, iterate through plants and check if matured to get
+      // potential count
+      for (int j = 0; j < i->getCurrentCapacity(); j++) {
+        if (i->getPlants()[j]->isMature()) {
+          if (i->getPlants()[j]->getName() == "CarrotPlant") {
+            numOfCarrots++;
+          } else if (i->getPlants()[j]->getName() == "PotatoPlant") {
+            numOfPotatoes++;
+          }
+          mvwprintw(dynWin, 8, 1, "test  %s",
+                    i->getPlants()[j]->getName().c_str());
+        }
+      }
+    }
+  }
+  // Display the number of potatoes and carrots ready to be harvested
+  mvwprintw(dynWin, 1, 1, "Potatoes ready: %d", numOfPotatoes);
+  mvwprintw(dynWin, 2, 1, "Carrots ready: %d", numOfCarrots);
+  mvwprintw(dynWin, 3, 1, "C: Harvest carrots");
+  mvwprintw(dynWin, 4, 1, "P: Harvest potatoes");
+  // Refresh dynamic window
+  wrefresh(dynWin);
 }
+
+// Funtion to plant a new plant at the current position
 void GameManager::plantAtCurrentPosition(string plantType) {
-    int y = std::get<0>(player->getPosition());
-    int x = std::get<1>(player->getPosition());
-    switch (player->getDirection()) {
-        case 0: // North
-            y--;
-            break;
-        case 1: // East
-            x++;
-            break;
-        case 2: // South
-            y++;
-            break;
-        case 3: // West
-            x--;
-            break;
-    }
-    for (auto i = plots.begin(); i != plots.end(); i++) {
-        int currentCap = i->getCurrentCapacity();
-        int topY = std::get<0>(i->getTopLeftCoord());
-        int leftX = std::get<1>(i->getTopLeftCoord());
-        int bottomY = topY + std::get<0>(i->getDimensions());
-        int rightX = leftX + std::get<1>(i->getDimensions());
-
-        if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            if (player->getPlayersInventory()->howMany(plantType) > 1) {
-
-                // Map number to position in the plot
-                int yy = currentCap / (std::get<1>(i->getDimensions()) - 2);
-                int xx = currentCap % (std::get<1>(i->getDimensions()) - 2);
-
-                if (currentCap != i->getMaxCapacity()) {
-                    if (plantType == "Carrot") {
-                        i->addPlant(new CarrotPlant(coord{yy,xx}));
-                    } else if (plantType == "Potato") {
-                        i->addPlant(new PotatoPlant(coord{yy,xx}));
-                    }
-                    i->setCurrentCapacity(currentCap + 1);
-                } 
-                player->getPlayersInventory()->removeItem(plantType);
-            } else {
-                    // not enough, show error
-            }
+  // Get player coords
+  int y = std::get<0>(player->getPosition());
+  int x = std::get<1>(player->getPosition());
+  // Based on player direction, get coord facing in front of them
+  switch (player->getDirection()) {
+    case 0:  // North
+      y--;
+      break;
+    case 1:  // East
+      x++;
+      break;
+    case 2:  // South
+      y++;
+      break;
+    case 3:  // West
+      x--;
+      break;
+  }
+  // Iterate through plots and check which plot is the one player is facing
+  for (auto i = plots.begin(); i != plots.end(); i++) {
+    int currentCap = i->getCurrentCapacity();
+    int topY = std::get<0>(i->getTopLeftCoord());
+    int leftX = std::get<1>(i->getTopLeftCoord());
+    int bottomY = topY + std::get<0>(i->getDimensions());
+    int rightX = leftX + std::get<1>(i->getDimensions());
+    // For the right plot, first check if player has enough items to plant
+    if (y > topY && y < bottomY && x > leftX && x < rightX) {
+      if (player->getPlayersInventory()->howMany(plantType) > 1) {
+        // Map number to position in the plot
+        int yy = currentCap / (std::get<1>(i->getDimensions()) - 2);
+        int xx = currentCap % (std::get<1>(i->getDimensions()) - 2);
+        // If plot is not full, plant plant
+        if (currentCap != i->getMaxCapacity()) {
+          // Based on the type of item or plant, create a new plant object
+          if (plantType == "Carrot") {
+            i->addPlant(new CarrotPlant(coord{yy, xx}));
+          } else if (plantType == "Potato") {
+            i->addPlant(new PotatoPlant(coord{yy, xx}));
+          }
+          // Update capacity
+          i->setCurrentCapacity(currentCap + 1);
         }
-
+        // Remove item from inventory
+        player->getPlayersInventory()->removeItem(plantType);
+      } else {
+        // not enough, show error
+      }
     }
+  }
 }
+
+// Function to move player
 void GameManager::movePlayer(int direction) {
-    int y = std::get<0>(player->getPosition());
-    int x = std::get<1>(player->getPosition());
-      
-    if (direction == player->getDirection()) {
-        switch (direction) {
-            case 0: // North
-                y--;
-                break;
-            case 1: // East
-                x++;
-                break;
-            case 2: // South
-                y++;
-                break;
-            case 3: // West
-                x--;
-                break;
-        }
+  // Get players coords
+  int y = std::get<0>(player->getPosition());
+  int x = std::get<1>(player->getPosition());
+  // Adjust based on player direction
+  if (direction == player->getDirection()) {
+    switch (direction) {
+      case 0:  // North
+        y--;
+        break;
+      case 1:  // East
+        x++;
+        break;
+      case 2:  // South
+        y++;
+        break;
+      case 3:  // West
+        x--;
+        break;
     }
-    coord newPos = coord{y, x};
-    if (isValidPosition(newPos)) {
-        player->setDirection(direction);
-        player->setPosition(newPos);
-    }
+  }
+  // Check if new position is valid
+  coord newPos = coord{y, x};
+  if (isValidPosition(newPos)) {
+    player->setDirection(direction);
+    player->setPosition(newPos);
+  }
 }
+// Function to check if position is valid
 bool GameManager::isValidPosition(coord position) {
-    int y = std::get<0>(position);
-    int x = std::get<1>(position);
-    int height = LINES - (LINES * 0.30) - 1;
-    int width = (COLS - 2) * 0.75;
-    return (x >= 1 && x < width - 1 && y >= 1 && y < height - 1);
+  // Get x,y coords and check if they are within the window bounds
+  int y = std::get<0>(position);
+  int x = std::get<1>(position);
+  int height = LINES - (LINES * 0.30) - 1;
+  int width = (COLS - 2) * 0.75;
+  return (x >= 1 && x < width - 1 && y >= 1 && y < height - 1);
 }
+
+// Function to show plant menu
 void GameManager::showPlantMenu() {
-    Display::drawDynamicWindow(mainWin);
-    setHarvestMenuOpen(false);
-    setShopOpen(false);
-    setPlantMenuOpen(true);
-    mvwprintw(dynWin, 0, 1, "Plants");
-    mvwprintw(dynWin, 1, 1, "C: Plant carrot");
-    mvwprintw(dynWin, 2, 1, "P: Plant potato");
-
-    wrefresh(dynWin);
+  // Draw dynamic window
+  Display::drawDynamicWindow(mainWin);
+  // Close all menus and open plant menu
+  setHarvestMenuOpen(false);
+  setShopOpen(false);
+  setPlantMenuOpen(true);
+  // Labels
+  mvwprintw(dynWin, 0, 1, "Plants");
+  mvwprintw(dynWin, 1, 1, "C: Plant carrot");
+  mvwprintw(dynWin, 2, 1, "P: Plant potato");
+  // Refresh dynamic window
+  wrefresh(dynWin);
 }
+
 bool GameManager::getPlantMenuOpen() {
-    return plantMenuOpen;
-}
+  return plantMenuOpen;
+}  // Get methods for plant menu
 void GameManager::setPlantMenuOpen(bool status) {
-    plantMenuOpen = status;
-}
+  plantMenuOpen = status;
+}  // Set methods for plant menu
 bool GameManager::getHarvestMenuOpen() {
-    return harvestMenuOpen;
-}
+  return harvestMenuOpen;
+}  // Get methods for harvest menu
 void GameManager::setHarvestMenuOpen(bool status) {
-    harvestMenuOpen = status;
-}
+  harvestMenuOpen = status;
+}  // set method for harvest menu
+
+// Function to water current plant
 void GameManager::waterCurrentPlant() {
-    int y = std::get<0>(player->getPosition());
-    int x = std::get<1>(player->getPosition());
-    switch (player->getDirection()) {
-        case 0: // North
-            y--;
-            break;
-        case 1: // East
-            x++;
-            break;
-        case 2: // South
-            y++;
-            break;
-        case 3: // West
-            x--;
-            break;
+  // Get player coords
+  int y = std::get<0>(player->getPosition());
+  int x = std::get<1>(player->getPosition());
+  // Adjust based on direction player is facing
+  switch (player->getDirection()) {
+    case 0:  // North
+      y--;
+      break;
+    case 1:  // East
+      x++;
+      break;
+    case 2:  // South
+      y++;
+      break;
+    case 3:  // West
+      x--;
+      break;
+  }
+  // iterate over plots to find which plot they are facing
+  for (auto i = plots.begin(); i != plots.end(); i++) {
+    int currentCap = i->getCurrentCapacity();
+    int topY = std::get<0>(i->getTopLeftCoord());
+    int leftX = std::get<1>(i->getTopLeftCoord());
+    int bottomY = topY + std::get<0>(i->getDimensions());
+    int rightX = leftX + std::get<1>(i->getDimensions());
+    // For the right plot, water all plants in the plot
+    if (y > topY && y < bottomY && x > leftX && x < rightX) {
+      for (int j = 0; j < i->getCurrentCapacity(); j++) {
+        i->getPlants()[j]->waterPlant();
+      }
     }
-    for (auto i = plots.begin(); i != plots.end(); i++) {
-        int currentCap = i->getCurrentCapacity();
-        int topY = std::get<0>(i->getTopLeftCoord());
-        int leftX = std::get<1>(i->getTopLeftCoord());
-        int bottomY = topY + std::get<0>(i->getDimensions());
-        int rightX = leftX + std::get<1>(i->getDimensions());
-
-        if (y > topY && y < bottomY && x > leftX && x < rightX) {
-            for (int j = 0; j < i->getCurrentCapacity(); j++) {
-                i->getPlants()[j]->waterPlant();
-            }
-        }
-    }
+  }
 }
+// Function to advance day
 void GameManager::advanceDay() {
-    currentDay++;
-    for (auto i = plots.begin(); i != plots.end(); i++) {
-        for (int j = 0; j < i->getCurrentCapacity(); j++) {
-            i->getPlants()[j]->advanceDay();
-        }
+  // increment current day
+  currentDay++;
+  // Iterate over plots
+  for (auto i = plots.begin(); i != plots.end(); i++) {
+    // Iterate over plants in plots
+    for (int j = 0; j < i->getCurrentCapacity(); j++) {
+      // Call advance day on plants
+      i->getPlants()[j]->advanceDay();
     }
+  }
 }
-

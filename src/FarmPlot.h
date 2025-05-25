@@ -10,21 +10,21 @@ using std::vector;
 
 class FarmPlot : public Plot {
  protected:
- //Define vector of plants to store plants in a farmPlot
+  // Define vector of plants to store plants in a farmPlot
   vector<Plant*> plants;
 
  public:
-  //Decalre constructors
+  // Declare constructors
   FarmPlot(coord topLeft, coord dimension);
   FarmPlot();
 
-  //Declare functions
+  // Declare functions
   bool addPlant(Plant* plant);
   bool removePlant(int index);
   vector<Plant*>& getPlants();
 
-  //Declare destructor
-  // ~FarmPlot();
+  // Declare destructor
+  //  ~FarmPlot();
 };
 
 #endif
