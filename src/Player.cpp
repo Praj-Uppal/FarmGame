@@ -3,7 +3,7 @@
 
 coord origin = {0, 0};
 
-// Define default constructor to spawn player at origin facing south, with no
+// Define default constructor to spawn player at origin facing North, with no
 // money. Also intialize player inventory.
 Player::Player()
     : position(origin),

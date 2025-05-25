@@ -22,8 +22,8 @@ void test_player_constructor() {
         cout << "Default Player constructor failed; Player inventory ptr is a nullptr!" << endl;
         return;
     }
-    //Checking if direction is assigned correctly to south
-    if (player.getDirection()!= 2) {
+    //Checking if direction is assigned correctly to north
+    if (player.getDirection()!= Player::MoveDirection::North) {
         cout << "Default Player constructor failed; Player direction is not South!" << endl;
         return;
     }
