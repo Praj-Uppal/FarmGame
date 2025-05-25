@@ -21,14 +21,13 @@ class Item;
  */
 class Animal : public Entity {
  protected:
- //Define attributes
+  // Define attributes
   coord position;
   bool fed;
 
  public:
- //Declare constructor and destructor
+  // Declare constructor and destructor
   Animal(int growthRequired, int careRequired, string name);
-  virtual ~Animal();
 
   // Virtual function which has to be implemented in the individual animals
   // classes as different animals have different evolution requirements
@@ -39,14 +38,13 @@ class Animal : public Entity {
   // quantity, and slaughter conditions vary, this is a virtual function
   virtual std::vector<Item*> slaughter() = 0;
 
-
   // Whether animal has been fed, returns a bool
   bool isFed() const;
   // Set methods for feed
   void feed();
   void unfeed();
 
-//Set and get methods for position
+  // Set and get methods for position
   coord getPosition() const;
   void setPosition(coord value);
 };
