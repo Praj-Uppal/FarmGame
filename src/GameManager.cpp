@@ -245,16 +245,16 @@ void GameManager::harvestPlot(string plant) {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get plot facing in front of them
   switch (player->getDirection()) {
-    case 0:  // North
+    case Player::MoveDirection::North:  // North
       y--;
       break;
-    case 1:  // East
+    case Player::MoveDirection::East:  // East
       x++;
       break;
-    case 2:  // South
+    case Player::MoveDirection::South:  // South
       y++;
       break;
-    case 3:  // West
+    case Player::MoveDirection::West:  // West
       x--;
       break;
   }
