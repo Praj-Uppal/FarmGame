@@ -71,7 +71,7 @@ void Shop::sellInventory(Player* player) {
   vector<pair<string, Item*>> itemlist;
   // iterate over player inventory and populate the above vector
   for (auto index = inv->begin(); index != inv->end(); index++) {
-    itemlist.push_back({index->first, index->second.first});
+    itemlist.push_back(make_pair(index->first, index->second.first));
   }
 
   // Iterate over Item vector, and wherever item Quantity is above 0, use sell

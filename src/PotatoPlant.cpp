@@ -2,10 +2,12 @@
 #include "Plant.h"
 #include <vector>
 
+//Define constructor
 PotatoPlant::PotatoPlant(tuple<int, int> position) : Plant(position, 3, 6,"PotatoPlant") {
     
 }
 
+//Define harvest
 vector<tuple<Item*,int>> PotatoPlant::harvest() {
     vector<tuple<Item*,int>> produce;
     if (isMature()) {
