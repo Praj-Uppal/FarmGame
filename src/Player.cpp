@@ -1,4 +1,5 @@
 #include "Player.h"
+
 #include <ncurses.h>
 
 coord origin = {0, 0};
@@ -14,25 +15,15 @@ Player::Player()
 
 // Define Destructor
 // Player::~Player() {
-  // delete playersInventory;
+// delete playersInventory;
 // }  // Just need to delete inventory pointer only since dynamically allocated
 
 // Define get methods
-coord Player::getPosition() const { 
-    return position; 
-}
-coord Player::getPrevPosition() const { 
-    return prevPosition; 
-}
-Player::MoveDirection Player::getDirection() const { 
-    return direction; 
-}
-Inventory* Player::getPlayersInventory() const { 
-    return playersInventory; 
-}
-int Player::getMoney() const { 
-    return money; 
-}
+coord Player::getPosition() const { return position; }
+coord Player::getPrevPosition() const { return prevPosition; }
+Player::MoveDirection Player::getDirection() const { return direction; }
+Inventory* Player::getPlayersInventory() const { return playersInventory; }
+int Player::getMoney() const { return money; }
 
 // Define set Methods
 void Player::setPosition(coord newpos) {
@@ -41,8 +32,8 @@ void Player::setPosition(coord newpos) {
 }
 void Player::setDirection(Player::MoveDirection dir) { direction = dir; }
 void Player::setPlayersInventory(Inventory* newinv) {
-  delete playersInventory; //Deleting the old inventory pointer
-  playersInventory = newinv; //Assigning the new inventory pointer
+  delete playersInventory;    // Deleting the old inventory pointer
+  playersInventory = newinv;  // Assigning the new inventory pointer
 }
 void Player::setPlayersMoney(int newmoney) { money = newmoney; }
 
