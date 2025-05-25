@@ -1,10 +1,13 @@
 #include "GameManager.h"
+
+#include <ncurses.h>
+
+#include <string>
+
 #include "Allincludes.h"
 #include "CarrotPlant.h"
 #include "Display.h"
 #include "Item.h"
-#include <ncurses.h>
-#include <string>
 
 GameManager::GameManager() : currentDay(1), gameRunning(true) {
   // Init ncurses
@@ -106,8 +109,8 @@ void GameManager::handleInput() {
     case KEY_UP:
     case 'w':
     case 'W':
-		  movePlayer(Player::MoveDirection::North);
-		  break;
+      movePlayer(Player::MoveDirection::North);
+      break;
     case KEY_RIGHT:
     case 'd':
     case 'D':
@@ -242,16 +245,16 @@ void GameManager::harvestPlot(string plant) {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get plot facing in front of them
   switch (player->getDirection()) {
-    case Player::MoveDirection::North: // North
+    case 0:  // North
       y--;
       break;
-    case Player::MoveDirection::East: // East
+    case 1:  // East
       x++;
       break;
-    case Player::MoveDirection::South: // South
+    case 2:  // South
       y++;
       break;
-    case Player::MoveDirection::West: // West
+    case 3:  // West
       x--;
       break;
   }
@@ -270,21 +273,30 @@ void GameManager::harvestPlot(string plant) {
       // for (int j = 0; j < i->getCurrentCapacity(); j++) {
       // if (i->getPlants()[j]->isMature()) {
       // loop over plants in plot and check if mature
-      for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
-        // If mature, increment carrot or potato count
-        if (i->getPlants()[j]->isMature()) {
-          if (plant == "Carrot") {
+      if (plant == "Carrot") {
+        for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
+          // If mature and a carrot, increment carrot or potato count
+          if (i->getPlants()[j]->isMature() &&
+              i->getPlants()[j]->getName() == "CarrotPlant") {
             i->removePlant(j);
+            i->setCurrentCapacity(i->getCurrentCapacity() - 1);
             numOfCarrots++;
-          } else if (plant == "Potato") {
-            i->removePlant(j);
-            numOfPotatoes++;
           }
-          i->setCurrentCapacity(i->getCurrentCapacity() - 1);
+        }
+      }
+        else if (plant == "Potato") {
+          for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
+            if (i->getPlants()[j]->isMature() &&
+                i->getPlants()[j]->getName() == "PotatoPlant") {
+              i->removePlant(j);
+              i->setCurrentCapacity(i->getCurrentCapacity() - 1);
+              numOfPotatoes++;
+            }
+          }
         }
       }
     }
-  }
+
   // Define carrot and potato items and add to player inventory
   Item* Carrot = new Item(2, 1, "Carrot");
   Item* Potato = new Item(4, 2, "Potato");
@@ -302,6 +314,7 @@ void GameManager::harvestPlot(string plant) {
   Display::drawDynamicWindow(mainWin);
 }
 
+
 // Function to show Harvest menu
 void GameManager::showHarvestMenu() {
   // Close other menus and open Harvest menu
@@ -317,16 +330,16 @@ void GameManager::showHarvestMenu() {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get plot facing in front of them
   switch (player->getDirection()) {
-    case Player::MoveDirection::North: // North
+    case Player::MoveDirection::North:  // North
       y--;
       break;
-    case Player::MoveDirection::East: // East
+    case Player::MoveDirection::East:  // East
       x++;
       break;
-    case Player::MoveDirection::South: // South
+    case Player::MoveDirection::South:  // South
       y++;
       break;
-    case Player::MoveDirection::West: // West
+    case Player::MoveDirection::West:  // West
       x--;
       break;
   }
@@ -373,16 +386,16 @@ void GameManager::plantAtCurrentPosition(string plantType) {
   int x = std::get<1>(player->getPosition());
   // Based on player direction, get coord facing in front of them
   switch (player->getDirection()) {
-    case Player::MoveDirection::North: // North
+    case Player::MoveDirection::North:  // North
       y--;
       break;
-    case Player::MoveDirection::East: // East
+    case Player::MoveDirection::East:  // East
       x++;
       break;
-    case Player::MoveDirection::South: // South
+    case Player::MoveDirection::South:  // South
       y++;
       break;
-    case Player::MoveDirection::West: // West
+    case Player::MoveDirection::West:  // West
       x--;
       break;
   }
@@ -409,9 +422,10 @@ void GameManager::plantAtCurrentPosition(string plantType) {
           }
           // Update capacity
           i->setCurrentCapacity(currentCap + 1);
+          // Remove item from inventory
+          player->getPlayersInventory()->removeItem(plantType);
         }
-        // Remove item from inventory
-        player->getPlayersInventory()->removeItem(plantType);
+
       } else {
         // not enough, show error
       }
