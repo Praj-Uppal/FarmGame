@@ -279,7 +279,6 @@ void GameManager::harvestPlot(string plant) {
           if (i->getPlants()[j]->isMature() &&
               i->getPlants()[j]->getName() == "CarrotPlant") {
             i->removePlant(j);
-            i->setCurrentCapacity(i->getCurrentCapacity() - 1);
             numOfCarrots++;
           }
         }
@@ -289,7 +288,6 @@ void GameManager::harvestPlot(string plant) {
             if (i->getPlants()[j]->isMature() &&
                 i->getPlants()[j]->getName() == "PotatoPlant") {
               i->removePlant(j);
-              i->setCurrentCapacity(i->getCurrentCapacity() - 1);
               numOfPotatoes++;
             }
           }

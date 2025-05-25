@@ -5,7 +5,7 @@
 // Define FarmPlot constructor
 FarmPlot::FarmPlot(coord topLeft, coord dimension)
     : Plot(topLeft, dimension) {};
-
+//Define default constructor
 FarmPlot::FarmPlot() : Plot(coord(0, 0), coord(20, 20)) {};
 
 // Function to add plant to a plot
@@ -31,6 +31,8 @@ bool FarmPlot::removePlant(int index) {
     delete plants[index];
     // Remove pointer from vector
     getPlants().erase(getPlants().begin() + index);
+    //decrease current capacity by 1
+    setCurrentCapacity(getCurrentCapacity()-1);
     return true;
   }
 }
