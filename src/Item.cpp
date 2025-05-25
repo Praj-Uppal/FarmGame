@@ -3,7 +3,7 @@
 // Define constructor. First value is buy cost, followed by sell cost, and
 // lastly the name of the item
 Item::Item(int sell,int buy, string name)
-    : buyCost(buy), sellCost(sell), name(name) {};
+    : sellCost(sell), buyCost(buy), name(name) {};
 // Define Default; let buy cost = sell cost = 0, and name be blank;
 Item::Item() : Item(0, 0, "") {};
 

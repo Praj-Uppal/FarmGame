@@ -14,6 +14,7 @@ class Plant : public Entity {
         bool watered;
 
     public:
+    //Declare constructor and destructor
         Plant(tuple<int, int> position, int growthRequired, int careRequired,string name);
         virtual ~Plant() = default;
 
