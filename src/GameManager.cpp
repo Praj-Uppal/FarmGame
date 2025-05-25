@@ -547,3 +547,9 @@ void GameManager::advanceDay() {
     }
   }
 }
+// Function to close the program
+void GameManager::cleanup() {
+    // This causes the program to return the terminal to normal mode
+    // from curses mode
+    endwin();
+}
