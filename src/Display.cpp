@@ -119,7 +119,7 @@ WINDOW *Display::drawErrorWindow(WINDOW *mainWin) {
 
   // Create the window using the function defined above and assign to ptr
   errorWindow = create_newwin(height, width, starty, startx);
-  //Label
+  // Label
   mvwprintw(errorWindow, 0, 1, "Error Messages");
   // refresh screen
   wrefresh(errorWindow);
@@ -177,11 +177,13 @@ void Display::drawCommands(WINDOW *comWin) {
   // Insert Labels with spaces in between!
   mvwprintw(comWin, startY, 4, "Controls:");
   wprintw(comWin, "    ");
-  wprintw(comWin, "WASD/Arrows: Move");
+  wprintw(comWin, "WASD: Move");
   wprintw(comWin, "    ");
-  wprintw(comWin, "E/Space: Water plant");
+  wprintw(comWin, "E/Enter: Water plant");
   wprintw(comWin, "    ");
   wprintw(comWin, "P: Plant menu");
+  wprintw(comWin, "    ");
+  wprintw(comWin, "Q: Quit");
   wmove(comWin, startY + 1, 4);
   wprintw(comWin, "H: Harvest");
   wprintw(comWin, "    ");
@@ -189,9 +191,6 @@ void Display::drawCommands(WINDOW *comWin) {
   wprintw(comWin, "    ");
   wprintw(comWin, "N: Next day");
   wprintw(comWin, "    ");
-  wprintw(comWin, "Q: Quit");
-  wprintw(comWin, "    ");
-  wmove(comWin, startY + 2, 4);
   wprintw(comWin, "Esc: Close Dynamic window");
   wrefresh(comWin);
 }

@@ -133,22 +133,22 @@ void GameManager::handleInput() {
   int ch = getchar();
   // Based on the key pressed, different actions
   switch (ch) {
-    case KEY_UP:
+    // case KEY_UP:
     case 'w':
     case 'W':
       movePlayer(Player::MoveDirection::North);
       break;
-    case KEY_RIGHT:
+    // case KEY_RIGHT:
     case 'd':
     case 'D':
       movePlayer(Player::MoveDirection::East);
       break;
-    case KEY_DOWN:
+    // case KEY_DOWN:
     case 's':
     case 'S':
       movePlayer(Player::MoveDirection::South);
       break;
-    case KEY_LEFT:
+    // case KEY_LEFT:
     case 'a':
     case 'A':
       movePlayer(Player::MoveDirection::West);
