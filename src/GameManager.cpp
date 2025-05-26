@@ -47,6 +47,13 @@ GameManager::GameManager()
   player->getPlayersInventory()->addItem(Carrot, 5);
   player->getPlayersInventory()->addItem(Potato, 3);
 
+  //Try to load in data from save file
+  ifstream test("save.dat"); //Check if file exists
+  if (test.is_open()) {
+    test.close();
+    loadMoney();
+  }
+
   // breaks up game window into segments
   int vSplit = ((LINES - (LINES * 0.30) - 1) / 3);
   int hSplit = ((COLS - 2) * 0.75) / 5;
@@ -763,7 +770,30 @@ void GameManager::setNoCarrotHarvestError(bool status) {
 }
 // Function to close the program
 void GameManager::cleanup() {
+    //Save money to save file
+    saveMoney();
     // This causes the program to return the terminal to normal mode
     // from curses mode
     endwin();
+}
+
+//Function to make a save file
+void GameManager::saveMoney() {
+  //Open file to put data in
+  ofstream saveFile("save.dat");
+    if (saveFile.is_open()) { //If save file is open, save money in it!
+      saveFile << player->getMoney() << endl;
+      saveFile.close();
+    }
+}
+
+void GameManager::loadMoney() {
+  //Open file to get data from
+  ifstream saveFile("save.dat");
+    if (saveFile.is_open()) { //If save file is open, load money from it!
+      int money;
+      saveFile >> money;
+      player->setPlayersMoney(money);
+      saveFile.close();
+    }
 }

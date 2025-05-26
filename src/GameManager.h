@@ -7,6 +7,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <fstream>
 #include"AllHeader.h"
 #include "FarmPlot.h"
 #include "Player.h"
@@ -37,6 +38,10 @@ private:
     WINDOW* comWin;
     WINDOW* gameWin;
     WINDOW* errorWin;
+
+    //Save/ Load functions for money
+    void saveMoney();
+    void loadMoney();
     
 public:
     GameManager();
