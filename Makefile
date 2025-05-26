@@ -27,7 +27,7 @@ LIBS = -lncursestw -ldl -pthread
 # Build and run
 .PHONY: all
 all: 
-	echo "This is not working yet"
+
 	# $(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) $(SRCS) $(LIBS)
 	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS)
 	./$(TARGET)
@@ -40,11 +40,9 @@ display:
 # Just build
 .PHONY: build 
 build: 
-	echo "This is not working yet"
 	# $(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) $(SRCS) $(LIBS)
 
 # Clean repo
 .PHONY: clean
 clean: 
-	echo "This is not working yet"
 	# rm -f $(TARGET)
