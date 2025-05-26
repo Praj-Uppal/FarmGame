@@ -577,6 +577,7 @@ void GameManager::advanceDay() {
   }
 }
 
+
 // Function to show error when players trying to plant in full plot
 void GameManager::showFullPlotError() {
   // Draw Error window
@@ -759,4 +760,10 @@ bool GameManager::getNoCarrotHarvestError() { return NoCarrotsToHarvest; }
 // Set method for No Potatoes to harvest
 void GameManager::setNoCarrotHarvestError(bool status) {
   NoCarrotsToHarvest = status;
+
+// Function to close the program
+void GameManager::cleanup() {
+    // This causes the program to return the terminal to normal mode
+    // from curses mode
+    endwin();
 }
