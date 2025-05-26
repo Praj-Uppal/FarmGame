@@ -28,21 +28,15 @@ LIBS = -lncursestw -ldl -pthread
 .PHONY: all
 all: 
 
-	# $(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) $(SRCS) $(LIBS)
 	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS)
-	./$(TARGET)
-	
-.PHONY: display
-display:
-	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp $(LIBS)
 	./$(TARGET)
 	
 # Just build
 .PHONY: build 
 build: 
-	# $(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) $(SRCS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS)
 
 # Clean repo
 .PHONY: clean
 clean: 
-	# rm -f $(TARGET)
+	rm -f $(TARGET)
