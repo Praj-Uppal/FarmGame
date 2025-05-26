@@ -54,6 +54,11 @@ GameManager::GameManager()
     loadMoney();
   }
 
+  //Check is save money is below or at 0, and if so set to 10
+  if (player->getMoney() <= 0) {
+    player->setPlayersMoney(10);
+  }
+
   // breaks up game window into segments
   int vSplit = ((LINES - (LINES * 0.30) - 1) / 3);
   int hSplit = ((COLS - 2) * 0.75) / 5;
@@ -397,8 +402,6 @@ void GameManager::showHarvestMenu() {
           } else if (i->getPlants()[j]->getName() == "PotatoPlant") {
             numOfPotatoes++;
           }
-          mvwprintw(dynWin, 8, 1, "test  %s",
-                    i->getPlants()[j]->getName().c_str());
         }
       }
     }
