@@ -54,3 +54,4 @@ build:
 .PHONY: clean
 clean: 
 	rm -f $(TARGET)
+	rm -f save.dat
