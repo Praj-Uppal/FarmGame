@@ -44,8 +44,8 @@ GameManager::GameManager()
 
   Item* Carrot = new Item(1, 1, "Carrot");
   Item* Potato = new Item(4, 4, "Potato");
-  player->getPlayersInventory()->addItem(Carrot, 5);
-  player->getPlayersInventory()->addItem(Potato, 3);
+  player->getPlayersInventory()->addItem(Carrot);
+  player->getPlayersInventory()->addItem(Potato);
 
   //Try to load in data from save file
   ifstream test("save.dat"); //Check if file exists
