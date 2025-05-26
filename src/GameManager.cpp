@@ -9,7 +9,21 @@
 #include "Display.h"
 #include "Item.h"
 
-GameManager::GameManager() : currentDay(1), gameRunning(true) {
+
+GameManager::GameManager()
+    : currentDay(1),
+      gameRunning(true),
+      //Set all menu options to false
+      plantMenuOpen(false),
+      harvestMenuOpen(false),
+      shopOpen(false),
+      FullPlotError(false),
+      InsufficientItemsError(false),
+      InsufficientMoneyError(false),
+      NoPotatoesToHarvest(false),
+      NoCarrotsToHarvest(false),
+      NoPotatoesToSell(false),
+      NoCarrotsToSell(false) {
   // Init ncurses
   initscr();              // This starts curses mode
   cbreak();               // Catch all keyboard input
@@ -20,6 +34,7 @@ GameManager::GameManager() : currentDay(1), gameRunning(true) {
   start_color();
   init_pair(1, COLOR_BLUE, COLOR_BLACK);
 
+  // initialise Game variables
   player = new Player();
   farmPlot = new FarmPlot();
   shop = new Shop();
@@ -163,7 +178,7 @@ void GameManager::handleInput() {
           player->getPlayersInventory()->addItem(new Item(1, 1, "Carrot"));
           Display::drawInventoryWindow(mainWin);
         } else {
-         showInsufficientMoneyError();
+          showInsufficientMoneyError();
         }
       }
       break;
@@ -173,8 +188,7 @@ void GameManager::handleInput() {
         if (player->getPlayersInventory()->howMany("Carrot") > 1) {
           player->getPlayersInventory()->removeItem("Carrot");
           player->setPlayersMoney(player->getMoney() + 1);
-        }
-        else {
+        } else {
           showNoCarrotSellError();
         }
       }
@@ -185,8 +199,7 @@ void GameManager::handleInput() {
         if (player->getPlayersInventory()->howMany("Potato") > 1) {
           player->getPlayersInventory()->removeItem("Potato");
           player->setPlayersMoney(player->getMoney() + 4);
-        }
-        else {
+        } else {
           showNoPotatoSellError();
         }
       }
@@ -747,5 +760,3 @@ bool GameManager::getNoCarrotHarvestError() { return NoCarrotsToHarvest; }
 void GameManager::setNoCarrotHarvestError(bool status) {
   NoCarrotsToHarvest = status;
 }
-
-
