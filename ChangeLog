@@ -1,0 +1,8 @@
+Change Log Entry - Exclusion of Animals and Penn from Game
+Change description:
+The originally proposed design for the farming game included Animals, which were intended to be placed into Penns. However, these features were ommitted from the final game.
+
+Justification:
+Due to time constraints during the development phase, we chose to prioritize gameplay functionality and to overall polish the game.
+Additionally, reflecting on the plan, we found that the animals and their associated penn classes would simply be providing redundant functionality, as their behavior was near identical to plants and farmplots.
+To avoid simply duplicating and adding redundancy to the game, these features were decided to be ommitted from the final game.
