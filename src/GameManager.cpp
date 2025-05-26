@@ -760,7 +760,7 @@ bool GameManager::getNoCarrotHarvestError() { return NoCarrotsToHarvest; }
 // Set method for No Potatoes to harvest
 void GameManager::setNoCarrotHarvestError(bool status) {
   NoCarrotsToHarvest = status;
-
+}
 // Function to close the program
 void GameManager::cleanup() {
     // This causes the program to return the terminal to normal mode
