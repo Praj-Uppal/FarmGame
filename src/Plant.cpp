@@ -6,7 +6,8 @@
 
 using std::tuple;
 
-Plant::Plant(tuple<int, int> coords, int growthRequired, int careRequired, string name) {
+Plant::Plant(tuple<int, int> coords, int growthRequired, int careRequired,
+             string name) {
   this->careRequired = careRequired;
   this->growthRequired = growthRequired;
   growthStage = 0;

@@ -15,10 +15,10 @@
  */
 class Cow : public Animal {
  public:
- //Declare Constructor
+  // Declare Constructor
   Cow(coord position);
 
-  //Declare raise, and slaughter functions
+  // Declare raise, and slaughter functions
   void raise() override;
 
   // Produces 3x Beef upon successful slaughter, or nothing if not mature.

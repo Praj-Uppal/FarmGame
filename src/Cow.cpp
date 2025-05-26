@@ -21,10 +21,10 @@ void Cow::raise() {
 }
 
 vector<tuple<Item*, int>> Cow::Slaughter() {
-	//Define produce vector
+  // Define produce vector
   vector<tuple<Item*, int>> produce;
   if (isMature()) {
-	//if mature, produce steak and push to vector
+    // if mature, produce steak and push to vector
     Item* steak = new Item(10, 5, "Steak");
     produce.push_back(make_tuple(steak, 2));
     return produce;

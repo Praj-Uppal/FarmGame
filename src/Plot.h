@@ -24,13 +24,13 @@ class Plot {
   Plot() = delete;
   Plot(coord topLeft, coord dimension);
 
-  //Declare get methods
+  // Declare get methods
   int getCurrentCapacity() const;
   int getMaxCapacity() const;
   coord getTopLeftCoord() const;
   coord getDimensions() const;
 
-  //Declare set methods
+  // Declare set methods
   void setCurrentCapacity(int cap);
   void setMaxCapacity(int cap);
 };

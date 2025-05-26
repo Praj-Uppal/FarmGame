@@ -9,11 +9,10 @@
 #include "Display.h"
 #include "Item.h"
 
-
 GameManager::GameManager()
     : currentDay(1),
       gameRunning(true),
-      //Set all menu options to false
+      // Set all menu options to false
       plantMenuOpen(false),
       harvestMenuOpen(false),
       shopOpen(false),
@@ -47,14 +46,14 @@ GameManager::GameManager()
   player->getPlayersInventory()->addItem(Carrot);
   player->getPlayersInventory()->addItem(Potato);
 
-  //Try to load in data from save file
-  ifstream test("save.dat"); //Check if file exists
+  // Try to load in data from save file
+  ifstream test("save.dat");  // Check if file exists
   if (test.is_open()) {
     test.close();
     loadMoney();
   }
 
-  //Check is save money is below or at 0, and if so set to 10
+  // Check is save money is below or at 0, and if so set to 10
   if (player->getMoney() <= 0) {
     player->setPlayersMoney(10);
   }
@@ -587,7 +586,6 @@ void GameManager::advanceDay() {
   }
 }
 
-
 // Function to show error when players trying to plant in full plot
 void GameManager::showFullPlotError() {
   // Draw Error window
@@ -773,30 +771,30 @@ void GameManager::setNoCarrotHarvestError(bool status) {
 }
 // Function to close the program
 void GameManager::cleanup() {
-    //Save money to save file
-    saveMoney();
-    // This causes the program to return the terminal to normal mode
-    // from curses mode
-    endwin();
+  // Save money to save file
+  saveMoney();
+  // This causes the program to return the terminal to normal mode
+  // from curses mode
+  endwin();
 }
 
-//Function to make a save file
+// Function to make a save file
 void GameManager::saveMoney() {
-  //Open file to put data in
+  // Open file to put data in
   ofstream saveFile("save.dat");
-    if (saveFile.is_open()) { //If save file is open, save money in it!
-      saveFile << player->getMoney() << endl;
-      saveFile.close();
-    }
+  if (saveFile.is_open()) {  // If save file is open, save money in it!
+    saveFile << player->getMoney() << endl;
+    saveFile.close();
+  }
 }
 
 void GameManager::loadMoney() {
-  //Open file to get data from
+  // Open file to get data from
   ifstream saveFile("save.dat");
-    if (saveFile.is_open()) { //If save file is open, load money from it!
-      int money;
-      saveFile >> money;
-      player->setPlayersMoney(money);
-      saveFile.close();
-    }
+  if (saveFile.is_open()) {  // If save file is open, load money from it!
+    int money;
+    saveFile >> money;
+    player->setPlayersMoney(money);
+    saveFile.close();
+  }
 }

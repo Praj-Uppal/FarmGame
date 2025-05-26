@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-//Define is mature function
+// Define is mature function
 bool Entity::isMature() const {
   if (growthStage >= growthRequired) {
     return true;
