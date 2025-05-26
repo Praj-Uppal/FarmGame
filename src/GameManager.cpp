@@ -164,7 +164,7 @@ void GameManager::handleInput() {
         harvestPlot("Potato");
       } else if (getShopOpen()) {
         // If shop open try to buy potato
-        if (player->getMoney() >= 2) {
+        if (player->getMoney() >= 4) {
           player->setPlayersMoney(player->getMoney() - 4);
           player->getPlayersInventory()->addItem(new Item(4, 4, "Potato"));
           // Update inventory
