@@ -9,7 +9,21 @@
 #include "Display.h"
 #include "Item.h"
 
-GameManager::GameManager() : currentDay(1), gameRunning(true) {
+
+GameManager::GameManager()
+    : currentDay(1),
+      gameRunning(true),
+      //Set all menu options to false
+      plantMenuOpen(false),
+      harvestMenuOpen(false),
+      shopOpen(false),
+      FullPlotError(false),
+      InsufficientItemsError(false),
+      InsufficientMoneyError(false),
+      NoPotatoesToHarvest(false),
+      NoCarrotsToHarvest(false),
+      NoPotatoesToSell(false),
+      NoCarrotsToSell(false) {
   // Init ncurses
   initscr();              // This starts curses mode
   cbreak();               // Catch all keyboard input
@@ -20,6 +34,7 @@ GameManager::GameManager() : currentDay(1), gameRunning(true) {
   start_color();
   init_pair(1, COLOR_BLUE, COLOR_BLACK);
 
+  // initialise Game variables
   player = new Player();
   farmPlot = new FarmPlot();
   shop = new Shop();
@@ -27,8 +42,8 @@ GameManager::GameManager() : currentDay(1), gameRunning(true) {
   // Give player some starting money and seeds
   player->setPlayersMoney(100);
 
-  Item* Carrot = new Item(2, 1, "Carrot");
-  Item* Potato = new Item(4, 2, "Potato");
+  Item* Carrot = new Item(1, 1, "Carrot");
+  Item* Potato = new Item(4, 4, "Potato");
   player->getPlayersInventory()->addItem(Carrot, 5);
   player->getPlayersInventory()->addItem(Potato, 3);
 
@@ -78,6 +93,7 @@ void GameManager::initializeGame() {
   dynWin = Display::drawDynamicWindow(mainWin);
   comWin = Display::drawCommandWindow(mainWin);
   gameWin = Display::drawGameWindow(mainWin);
+  errorWin = Display::drawErrorWindow(mainWin);
   // Display information in windows
   Display::drawDays(mainWin, currentDay);
   Display::drawInventory(invWin, *player);
@@ -137,10 +153,12 @@ void GameManager::handleInput() {
       } else if (getShopOpen()) {
         // If shop open try to buy potato
         if (player->getMoney() >= 2) {
-          player->setPlayersMoney(player->getMoney() - 2);
-          player->getPlayersInventory()->addItem(new Item(4, 2, "Potato"));
+          player->setPlayersMoney(player->getMoney() - 4);
+          player->getPlayersInventory()->addItem(new Item(4, 4, "Potato"));
           // Update inventory
           Display::drawInventoryWindow(mainWin);
+        } else {
+          showInsufficientMoneyError();
         }
       } else {
         // On default show plant menu
@@ -157,8 +175,10 @@ void GameManager::handleInput() {
       } else if (getShopOpen()) {  // If shop menu open, buy carrot
         if (player->getMoney() >= 1) {
           player->setPlayersMoney(player->getMoney() - 1);
-          player->getPlayersInventory()->addItem(new Item(2, 1, "Carrot"));
+          player->getPlayersInventory()->addItem(new Item(1, 1, "Carrot"));
           Display::drawInventoryWindow(mainWin);
+        } else {
+          showInsufficientMoneyError();
         }
       }
       break;
@@ -167,7 +187,9 @@ void GameManager::handleInput() {
       if (getShopOpen()) {
         if (player->getPlayersInventory()->howMany("Carrot") > 1) {
           player->getPlayersInventory()->removeItem("Carrot");
-          player->setPlayersMoney(player->getMoney() + 2);
+          player->setPlayersMoney(player->getMoney() + 1);
+        } else {
+          showNoCarrotSellError();
         }
       }
       break;
@@ -177,6 +199,8 @@ void GameManager::handleInput() {
         if (player->getPlayersInventory()->howMany("Potato") > 1) {
           player->getPlayersInventory()->removeItem("Potato");
           player->setPlayersMoney(player->getMoney() + 4);
+        } else {
+          showNoPotatoSellError();
         }
       }
       break;
@@ -282,28 +306,33 @@ void GameManager::harvestPlot(string plant) {
             numOfCarrots++;
           }
         }
-      }
-        else if (plant == "Potato") {
-          for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
-            if (i->getPlants()[j]->isMature() &&
-                i->getPlants()[j]->getName() == "PotatoPlant") {
-              i->removePlant(j);
-              numOfPotatoes++;
-            }
+      } else if (plant == "Potato") {
+        for (int j = i->getCurrentCapacity() - 1; j >= 0; --j) {
+          if (i->getPlants()[j]->isMature() &&
+              i->getPlants()[j]->getName() == "PotatoPlant") {
+            i->removePlant(j);
+            numOfPotatoes++;
           }
         }
       }
     }
+  }
 
   // Define carrot and potato items and add to player inventory
-  Item* Carrot = new Item(2, 1, "Carrot");
-  Item* Potato = new Item(4, 2, "Potato");
+  Item* Carrot = new Item(1, 1, "Carrot");
+  Item* Potato = new Item(4, 4, "Potato");
   int recievedCarrots = (numOfCarrots * 2);
   int recievedPotatoes = (numOfPotatoes * 4);
   // Add to player inventory
   if (plant == "Carrot") {
+    if (recievedCarrots == 0) {
+      showNoCarrotHarvestError();
+    }
     player->getPlayersInventory()->addItem(Carrot, recievedCarrots);
   } else if (plant == "Potato") {
+    if (recievedPotatoes == 0) {
+      showNoPotatoHarvestError();
+    }
     player->getPlayersInventory()->addItem(Potato, recievedPotatoes);
   }
   // close harvest menu
@@ -311,7 +340,6 @@ void GameManager::harvestPlot(string plant) {
   // update dynamic window
   Display::drawDynamicWindow(mainWin);
 }
-
 
 // Function to show Harvest menu
 void GameManager::showHarvestMenu() {
@@ -422,10 +450,11 @@ void GameManager::plantAtCurrentPosition(string plantType) {
           i->setCurrentCapacity(currentCap + 1);
           // Remove item from inventory
           player->getPlayersInventory()->removeItem(plantType);
+        } else {
+          showFullPlotError();
         }
-
       } else {
-        // not enough, show error
+        showInsufficientItemsError();
       }
     }
   }
@@ -547,6 +576,191 @@ void GameManager::advanceDay() {
     }
   }
 }
+
+
+// Function to show error when players trying to plant in full plot
+void GameManager::showFullPlotError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setFullPlotError(true);
+  setInsufficientItemsError(false);
+  setInsufficientMoneyError(false);
+  setNoCarrotSellError(false);
+  setNoPotatoSellError(false);
+  setNoCarrotHarvestError(false);
+  setNoPotatoHarvestError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "Trying to plant in full");
+  mvwprintw(errorWin, 2, 1, "Plot!");
+  mvwprintw(errorWin, 3, 1, "Move to different plot!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for fullploterror
+bool GameManager::getFullPlotError() { return FullPlotError; }
+// Set method for fullploterror
+void GameManager::setFullPlotError(bool status) { FullPlotError = status; }
+
+// Function to show error when players trying to plant in plot but not enough
+// items
+void GameManager::showInsufficientItemsError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setInsufficientItemsError(true);
+  setFullPlotError(false);
+  setInsufficientMoneyError(false);
+  setNoCarrotSellError(false);
+  setNoPotatoSellError(false);
+  setNoCarrotHarvestError(false);
+  setNoPotatoHarvestError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "Insufficient Items to");
+  mvwprintw(errorWin, 2, 1, "Plant!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for insufficientItemsError
+bool GameManager::getInsufficientItemsError() { return InsufficientItemsError; }
+// Set method for insufficientItemsError
+void GameManager::setInsufficientItemsError(bool status) {
+  InsufficientItemsError = status;
+}
+
+// Function to show error when players dont have enough funds to buy item
+void GameManager::showInsufficientMoneyError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setInsufficientMoneyError(true);
+  setInsufficientItemsError(false);
+  setFullPlotError(false);
+  setNoCarrotSellError(false);
+  setNoPotatoSellError(false);
+  setNoCarrotHarvestError(false);
+  setNoPotatoHarvestError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "Not Enough Money To Buy");
+  mvwprintw(errorWin, 2, 1, "Item!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for insufficient money error
+bool GameManager::getInsufficientMoneyError() { return InsufficientMoneyError; }
+// Set method for insufficientMoneyError
+void GameManager::setInsufficientMoneyError(bool status) {
+  InsufficientMoneyError = status;
+}
+
+// Function to show error when players dont have an carrot to sell
+void GameManager::showNoCarrotSellError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setNoCarrotSellError(true);
+  setNoPotatoSellError(false);
+  setInsufficientMoneyError(true);
+  setInsufficientItemsError(false);
+  setFullPlotError(false);
+  setNoCarrotHarvestError(false);
+  setNoPotatoHarvestError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "You dont have any");
+  mvwprintw(errorWin, 2, 1, "Carrots to sell!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for No carrots to sell
+bool GameManager::getNoCarrotSellError() { return NoCarrotsToSell; }
+// Set method for No carrots to sell
+void GameManager::setNoCarrotSellError(bool status) {
+  NoCarrotsToSell = status;
+}
+
+// Function to show error when players dont have an Potato to sell
+void GameManager::showNoPotatoSellError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setNoPotatoSellError(true);
+  setNoCarrotSellError(false);
+  setInsufficientMoneyError(true);
+  setInsufficientItemsError(false);
+  setFullPlotError(false);
+  setNoCarrotHarvestError(false);
+  setNoPotatoHarvestError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "You dont have any");
+  mvwprintw(errorWin, 2, 1, "Potatoes to sell!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for No Potatoes to sell
+bool GameManager::getNoPotatoSellError() { return NoPotatoesToSell; }
+// Set method for No Potatoes to sell
+void GameManager::setNoPotatoSellError(bool status) {
+  NoPotatoesToSell = status;
+}
+
+// Function to show error when no potatos to harvest
+void GameManager::showNoPotatoHarvestError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setNoPotatoHarvestError(true);
+  setNoCarrotHarvestError(false);
+  setNoPotatoSellError(false);
+  setNoCarrotSellError(false);
+  setInsufficientMoneyError(true);
+  setInsufficientItemsError(false);
+  setFullPlotError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "There are no mature");
+  mvwprintw(errorWin, 2, 1, "Potatoes to harvest");
+  mvwprintw(errorWin, 3, 1, "in this plot!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for No Potatoes to harvest
+bool GameManager::getNoPotatoHarvestError() { return NoPotatoesToHarvest; }
+// Set method for No Potatoes to harvest
+void GameManager::setNoPotatoHarvestError(bool status) {
+  NoPotatoesToHarvest = status;
+}
+
+// Function to show error when no Carrots to harvest
+void GameManager::showNoCarrotHarvestError() {
+  // Draw Error window
+  Display::drawErrorWindow(mainWin);
+  // Close all other types of errors and open specific error
+  setNoCarrotHarvestError(true);
+  setNoPotatoHarvestError(false);
+  setNoPotatoSellError(false);
+  setNoCarrotSellError(false);
+  setInsufficientMoneyError(true);
+  setInsufficientItemsError(false);
+  setFullPlotError(false);
+  // Labels
+  mvwprintw(errorWin, 1, 1, "There are no mature");
+  mvwprintw(errorWin, 2, 1, "Carrots to harvest");
+  mvwprintw(errorWin, 3, 1, "in this plot!");
+  // Refresh Error window
+  wrefresh(errorWin);
+}
+
+// Get method for No Potatoes to harvest
+bool GameManager::getNoCarrotHarvestError() { return NoCarrotsToHarvest; }
+// Set method for No Potatoes to harvest
+void GameManager::setNoCarrotHarvestError(bool status) {
+  NoCarrotsToHarvest = status;
+
 // Function to close the program
 void GameManager::cleanup() {
     // This causes the program to return the terminal to normal mode
