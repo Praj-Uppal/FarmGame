@@ -31,7 +31,7 @@ all:
 		echo "Error: ncurses was not found, please install it to ./ncurses!"; \
 		exit 1; \
 	fi
-	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
+	@$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
 	./$(TARGET)
 	
 # Just build
@@ -41,17 +41,17 @@ build:
 		echo "Error: ncurses was not found, please install it to ./ncurses!"; \
 		exit 1; \
 	fi
-	$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
+	@$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
 
 .PHONY: release
 	@if [ ! -d "ncurses" ]; then \
 		echo "Error: ncurses was not found, please install it to ./ncurses!"; \
 		exit 1; \
 	fi
-	$(CXX) -O3 $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
+	@$(CXX) -O3 $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
 
 # Clean repo
 .PHONY: clean
 clean: 
-	rm -f $(TARGET)
-	rm -f save.dat
+	@rm -f $(TARGET)
+	@rm -f save.dat
