@@ -99,10 +99,14 @@ Active controls are always displayed dynamically at the top of the terminal.
 ---
 
 ## Architecture Overview
-FarmGame/
+
+The project follows a **modular object-oriented architecture**, with clear separation between game logic, rendering, input handling, and data models. Each major gameplay concept is represented as a class or small group of related classes.
+
+### Source Structure
+`
 src/
-| │── main.cpp
-│ │── main.cpp
+│── main.cpp
+│
 │── GameManager.cpp / GameManager.h
 │── Display.cpp / Display.h
 │
@@ -125,12 +129,102 @@ src/
 │
 │── AllIncludes.h
 │── AllHeaders.h
+
+
 │── tests/
 │── Makefile
 │── README.md
+`
+---
+
+### Core Systems
+
+#### **GameManager**
+- Owns the main game loop
+- Handles:
+  - Time progression (days)
+  - Updating entities
+  - Routing player input
+  - Coordinating interactions between systems
+- Acts as the central authority for game state
 
 ---
 
+#### **Display**
+- Responsible for **all ncurses rendering**
+- Draws:
+  - Game world (farm plots, player position)
+  - Inventory and money
+  - Dynamic context-sensitive menus
+  - Command/keybind display
+- Rendering is partitioned into fixed terminal regions to maintain clarity and prevent redraw conflicts
+
+---
+
+#### **Player**
+- Tracks:
+  - Position and facing direction
+  - Money
+  - Inventory
+- Provides interaction methods for:
+  - Planting
+  - Watering
+  - Harvesting
+  - Buying and selling
+
+---
+
+#### **Inventory & Item**
+- `Item` is a base abstraction for all buyable/sellable objects
+- `Inventory` manages items using a map-based structure
+- Acts as the bridge between:
+  - World entities (plants)
+  - Economic systems (shop)
+
+---
+
+#### **Entity Hierarchy**
+- `Entity` is an abstract base class for all time-progressing objects
+- Encapsulates:
+  - Growth state
+  - Maturity checks
+  - Day progression logic
+
+**Plants**
+- `Plant` inherits from `Entity` and defines virtual growth and harvest behaviour
+- `CarrotPlant` and `PotatoPlant` implement crop-specific logic such as:
+  - Growth duration
+  - Harvest yield
+
+**Animals**
+- `Animal` and `Cow` classes were partially implemented
+- Designed to mirror the plant lifecycle model but were not completed within the one-week timeframe
+
+---
+
+#### **Plot System**
+- `Plot` provides shared spatial and capacity management
+- `FarmPlot` manages collections of plants and enforces capacity constraints
+- Designed to support additional plot types (e.g. animal pens) with minimal changes
+
+---
+
+#### **Shop**
+- Handles purchasing logic and price checks
+- Interacts directly with the `Player` and `Inventory`
+- Displays shop UI via the dynamic ncurses window
+
+---
+
+### Architectural Intent
+
+The architecture was deliberately designed to:
+- Emphasise **inheritance and polymorphism**
+- Allow unfinished features (e.g. animals) to be added later
+- Keep gameplay logic decoupled from rendering
+- Remain manageable under a **one-week development constraint**
+
+Despite limited scope, the structure supports extension without major refactoring.
 
 ### Core Design Concepts
 - **Entity**: Abstract base class for time-progressing game objects
