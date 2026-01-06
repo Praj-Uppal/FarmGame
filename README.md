@@ -12,7 +12,7 @@ This project focuses on **object-oriented design, game state management, and rea
 
 A gameplay walkthrough and feature demonstration can be found here:
 
-[![Demo Video](Media/swappy-20260107-004704.png)](https://youtu.be/KpmkU_T9SuQ)
+[![Demo Video](Media/Thumbnail.png)](https://youtu.be/KpmkU_T9SuQ)
 
 ---
 
@@ -219,7 +219,8 @@ The architecture was designed to support features such as animals and additional
 ## Screenshots
 
 **Gameplay Example:**
-![Gameplay Screenshot](Media/swappy-20260107-004704.png)
+![Gameplay Screenshot](Media/Gameplay1.png)
+![Gameplay Screenshot](Media/Gameplay2.png)
 
 ---
 
