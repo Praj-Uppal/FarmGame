@@ -12,7 +12,7 @@ This project focuses on **object-oriented design, game state management, and rea
 
 A gameplay walkthrough and feature demonstration can be found here:
 
-[YouTube Demo Link]
+[![Demo Video](media/swappy-20260107-004704.png)](https://youtu.be/KpmkU_T9SuQ)
 
 ---
 
@@ -57,8 +57,6 @@ There is no **explicit win condition**. The game functions as a sandbox-style si
 | N | Advance to next day |
 | Esc | Close dynamic window |
 | Q | Quit game |
-
-Active controls are always displayed dynamically at the top of the terminal.
 
 ---
 
@@ -220,7 +218,8 @@ The architecture was designed to support features such as animals and additional
 
 ## Screenshots
 
-[Add screenshots here]
+**Gameplay Example:**
+![Gameplay Screenshot](media/swappy-20260107-004704.png)
 
 ---
 
