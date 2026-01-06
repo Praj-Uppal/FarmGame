@@ -103,41 +103,21 @@ Active controls are always displayed dynamically at the top of the terminal.
 The project follows a **modular object-oriented architecture**, with clear separation between game logic, rendering, input handling, and data models. Each major gameplay concept is represented as a class or small group of related classes.
 
 ### Source Structure
-`
-src/
-│── main.cpp
-│
-│── GameManager.cpp / GameManager.h
-│── Display.cpp / Display.h
-│
-│── Player.cpp / Player.h
-│── Inventory.cpp / Inventory.h
-│── Item.cpp / Item.h
-│
-│── Entity.cpp / Entity.h
-│── Plant.cpp / Plant.h
-│ ├── CarrotPlant.cpp / CarrotPlant.h
-│ └── PotatoPlant.cpp / PotatoPlant.h
-│
-│── Animal.cpp / Animal.h (partially implemented)
-│ └── Cow.cpp / Cow.h (incomplete)
-│
-│── Plot.cpp / Plot.h
-│ └── FarmPlot.cpp / FarmPlot.h
-│
-│── Shop.cpp / Shop.h
-│
-│── AllIncludes.h
-│── AllHeaders.h
-
-
-│── tests/
-│── Makefile
+```
+FarmGame/
+│── src/                % Core C++ source files (game logic, entities, UI, manager)
+│── tests/              % Unit tests (Google Test)
+│── ncurses/            % Local ncurses build and headers
+│── Media/              % Screenshots, demo images, videos
+│── Documentation/      % Planning document and design notes
+│── Makefile            % Build configuration
 │── README.md
-`
+
+```
+
 ---
 
-### Core Systems
+### Core OOP Systems
 
 #### **GameManager**
 - Owns the main game loop
