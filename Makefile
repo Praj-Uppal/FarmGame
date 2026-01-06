@@ -1,7 +1,7 @@
 # Makefile
 
 # To compile ncurses, navigate to the ncurses subdirectory within a WSL shell (e.g. ncurses-6.3) and use the following command & config flags.
-# 1. CC=clang CXX=clang++ ./configure --prefix /home/spagett/docs/UNI/oop/FARM-GAME-1/ncurses --enable-widec --with-pthread CFLAGS="-fPIC" CXXFLAGS="-fPIC"
+# 1. CC=clang CXX=clang++ ./configure --prefix /yourPathHere/FarmGame/ncurses --enable-widec --with-pthread CFLAGS="-fPIC" CXXFLAGS="-fPIC"
 # 2. make -j16
 # 3. make install
 # NOTE: replace --prefix value with the appropriate absolute path on your PC pointing to <project root>/ncurses
