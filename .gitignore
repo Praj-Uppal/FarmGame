@@ -2,3 +2,4 @@
 .vscode/
 /save.dat
 /main
+./ncurses

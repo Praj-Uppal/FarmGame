@@ -211,7 +211,7 @@ WINDOW *Display::drawGameWindow(WINDOW *mainwin) {
 
   // Create the game window and assign to ptr
   gameWindow = create_newwin(height, width, starty, startx);
-  mvwprintw(gameWindow, 0, 1, "Game");  // Label window
+  mvwprintw(gameWindow, 0, 1, "Game"); // Label window
   // Refresh
   wrefresh(gameWindow);
   return gameWindow;
@@ -230,8 +230,8 @@ void Display::drawInventory(WINDOW *invWin, Player player) {
     string invEntry;
     std::stringstream formatter;
     formatter << index->first << ": " << (index->second.second - 1)
-              << " ";  // Display the name of the item and the number of items
-                       // in the inventory
+              << " "; // Display the name of the item and the number of items
+                      // in the inventory
     invEntry = formatter.str();
     // Get width of inventory window
     int invWidth = (COLS - 2) * 0.75;
@@ -265,7 +265,7 @@ void Display::drawPlayer(WINDOW *gameWin, Player player) {
   }
   // Move to player position and display player
   wmove(gameWin, playerY, playerX);
-  waddwstr(gameWin, L"☺");  // display player head
+  waddwstr(gameWin, L"☺"); // display player head
 
   // Create a window for the player's direction
   WINDOW *compassWin;
@@ -325,31 +325,31 @@ void Display::drawFarmPlots(WINDOW *gameWin, vector<FarmPlot> plots) {
       // Display plant based on plant type, and its growth stage
       if (plants[j]->getName() == "CarrotPlant") {
         switch (plants[j]->getGrowthStage()) {
-          case 0:
-          case 1:
-            waddwstr(plotWin, L"▢");
-            break;
-          case 2:
-            waddwstr(plotWin, L"▨");
-            break;
-          case 3:
-          default:
-            waddwstr(plotWin, L"▩");
-            break;
+        case 0:
+        case 1:
+          waddwstr(plotWin, L"□");
+          break;
+        case 2:
+          waddwstr(plotWin, L"▨");
+          break;
+        case 3:
+        default:
+          waddwstr(plotWin, L"▩");
+          break;
         }
       } else if (plants[j]->getName() == "PotatoPlant") {
         switch (plants[j]->getGrowthStage()) {
-          case 0:
-          case 1:
-            waddwstr(plotWin, L"○");
-            break;
-          case 2:
-            waddwstr(plotWin, L"◑");
-            break;
-          case 3:
-          default:
-            waddwstr(plotWin, L"●");
-            break;
+        case 0:
+        case 1:
+          waddwstr(plotWin, L"○");
+          break;
+        case 2:
+          waddwstr(plotWin, L"◑");
+          break;
+        case 3:
+        default:
+          waddwstr(plotWin, L"●");
+          break;
         }
       }
       wattroff(plotWin, COLOR_PAIR(1));

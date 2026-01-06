@@ -19,13 +19,13 @@ TARGET = main
 SRCS = main.cpp
 
 # Library includes
-LIB_INC = -I ncurses/include/ -I ncurses/include/ncursestw/ -L ncurses/lib/
+LIB_INC = -I ncurses/include/ncursestw/ -L ncurses/lib/
 
 # Activate library
-LIBS = -lncursestw -ldl -pthread
+LIBS = -lncursesw -ldl -pthread
 
 # Build and run
-.PHONY: all
+.PHONY: ale
 all: 
 	@if [ ! -d "ncurses" ]; then \
 		echo "Error: ncurses was not found, please install it to ./ncurses!"; \
@@ -43,7 +43,8 @@ build:
 	fi
 	@$(CXX) $(CXXFLAGS) $(LIB_INC) -o $(TARGET) ./src/Display.cpp ./src/Player.cpp ./src/FarmPlot.cpp ./src/CarrotPlant.cpp ./src/PotatoPlant.cpp ./src/Entity.cpp ./src/Item.cpp ./src/Plant.cpp ./src/Plot.cpp ./src/Inventory.cpp ./src/GameManager.cpp ./src/main.cpp $(LIBS) 2> /dev/null
 
-.PHONY: release
+.PHONY: release-
+	release:-
 	@if [ ! -d "ncurses" ]; then \
 		echo "Error: ncurses was not found, please install it to ./ncurses!"; \
 		exit 1; \
