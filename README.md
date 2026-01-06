@@ -100,18 +100,31 @@ Active controls are always displayed dynamically at the top of the terminal.
 
 ## Architecture Overview
 FarmGame/
-│── src/
-│   ├── GameManager.cpp
-│   ├── Display.cpp
-│   ├── Player.cpp
-│   ├── Inventory.cpp
-│   ├── Plot.cpp
-│   ├── FarmPlot.cpp
-│   ├── Entity.cpp
-│   ├── Plant.cpp
-│   ├── CarrotPlant.cpp
-│   ├── PotatoPlant.cpp
-│   └── Shop.cpp
+src/
+| │── main.cpp
+│ │── main.cpp
+│── GameManager.cpp / GameManager.h
+│── Display.cpp / Display.h
+│
+│── Player.cpp / Player.h
+│── Inventory.cpp / Inventory.h
+│── Item.cpp / Item.h
+│
+│── Entity.cpp / Entity.h
+│── Plant.cpp / Plant.h
+│ ├── CarrotPlant.cpp / CarrotPlant.h
+│ └── PotatoPlant.cpp / PotatoPlant.h
+│
+│── Animal.cpp / Animal.h (partially implemented)
+│ └── Cow.cpp / Cow.h (incomplete)
+│
+│── Plot.cpp / Plot.h
+│ └── FarmPlot.cpp / FarmPlot.h
+│
+│── Shop.cpp / Shop.h
+│
+│── AllIncludes.h
+│── AllHeaders.h
 │── tests/
 │── Makefile
 │── README.md
@@ -188,21 +201,18 @@ These limitations were the result of **time constraints**, not architectural iss
 
 ---
 
-### Building ncurses (Local Install)
+## Building ncurses (Local Install)
 
 To compile **ncurses locally** (recommended for WSL), navigate to the ncurses install directory and run:
 
-`bash`
 `CC=clang CXX=clang++ ./configure --prefix=/yourPathHere/FarmGame/ncurses --enable-widec --with-pthread CFLAGS="-fPIC" CXXFLAGS="-fPIC"`
 
 Then build and install: 
-`bash`
-`make -j16
+`make -j16 \
  make install
 `
 
-### Running the Game
-`bash`
+## Running the Game
 `make`
 
 ## Acknowledgements
