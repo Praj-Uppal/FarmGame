@@ -293,6 +293,7 @@ make install
 ```
 
 ## Running the Game
+Navigate to the FarmGame directory and run:
 ```bash
 make
 ```
